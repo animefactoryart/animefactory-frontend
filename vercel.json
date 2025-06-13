@@ -1,6 +1,8 @@
 {
   "rewrites": [
+    { "source": "/", "destination": "/index.html" },
     { "source": "/membership", "destination": "/membership.html" },
+    { "source": "/success", "destination": "/success.html" },
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/terms", "destination": "/terms.html" }
   ]
