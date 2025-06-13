@@ -994,7 +994,8 @@ setPersistence(auth, browserLocalPersistence).catch((err) => {
 });
 
     const firestore = getFirestore(app);
-    const storage = getStorage(app);
+    const storage = getStorage(app, "gs://ai-image-gen-157dc.firebasestorage.app");
+
     const authButtons = document.getElementById("auth-buttons");
     const userMenu = document.getElementById("user-menu");
     const userEmail = document.getElementById("user-email");
