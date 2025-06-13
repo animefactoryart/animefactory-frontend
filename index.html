@@ -896,9 +896,9 @@ input:focus {
 
   <img id="modal-img" src="" style="max-width: 90%; max-height: 90%;" />
 </div>
-<button onclick="testAPI()" style="margin: 20px; padding: 10px;">Test Backend</button>
+
   <script type="module">
-  
+    const BACKEND_URL = "https://animefactory-backend.onrender.com";
     function escapeHtml(text) {
   return text
     .replace(/&/g, "&amp;")
@@ -1647,8 +1647,9 @@ modal.onclick = () => modal.classList.add("hidden");
       }
     }
    
-const BACKEND_URL = "https://animefactory-backend.onrender.com";
 
+  
+  // === Test Backend Button ===
   async function testAPI() {
     try {
       const res = await fetch(`${BACKEND_URL}/api/job/test`);
@@ -1659,9 +1660,9 @@ const BACKEND_URL = "https://animefactory-backend.onrender.com";
     }
   }
 
-  // ✅ Make it accessible to the global scope
   window.testAPI = testAPI;
 
+</script>
 <footer class="site-footer">
   <a href="/terms.html">Terms of Service</a>
   <span class="divider">|</span>
@@ -1671,7 +1672,5 @@ const BACKEND_URL = "https://animefactory-backend.onrender.com";
 </footer>
 
 
-  
-</script>
 </body>
 </html>
