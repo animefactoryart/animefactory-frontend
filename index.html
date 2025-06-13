@@ -1650,15 +1650,17 @@ modal.onclick = () => modal.classList.add("hidden");
 
   
   // === Test Backend Button ===
-  async function testAPI() {
+ window.addEventListener("DOMContentLoaded", () => {
+  window.testAPI = async function () {
     try {
-      const res = await fetch(`${BACKEND_URL}/api/job/test`);
+      const res = await fetch("https://animefactory-backend.onrender.com/api/job/test");
       const text = await res.text();
       console.log("✅ RESPONSE TEXT:", text);
     } catch (e) {
       console.error("❌ TEST ERROR:", e);
     }
-  }
+  };
+});
 
   window.testAPI = testAPI;
 
