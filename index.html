@@ -1333,7 +1333,19 @@ pollJobStatus(data2.jobId, 0, prompt, (url) => onComplete(url, placeholder2), st
 let mostRecentJobStatus = "";
 
 
-  async function pollJobStatus(jobId, attempt = 0, prompt = "", onComplete = null, statusTracker = { highestPriority: 0 }, placeholderDiv = null) {
+  function dataURLtoBlob(dataUrl) {
+  const arr = dataUrl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
+}
+
+async function pollJobStatus(jobId, attempt = 0, prompt = "", onComplete = null, statusTracker = { highestPriority: 0 }, placeholderDiv = null) {
   const MAX_ATTEMPTS = 500;
   const POLL_INTERVAL = 3000;
   const userId = auth.currentUser.uid;
@@ -1355,7 +1367,7 @@ let mostRecentJobStatus = "";
     }
 
     if (secondsElapsed === 90) {
-      statusP.textContent = "⚠️ This is taking longer than usual. Please wait...";
+      statusP.textContent = "⚠️ This is taking longer than expected...";
     }
   }, 1000);
 
@@ -1395,8 +1407,7 @@ let mostRecentJobStatus = "";
         if (userPlan === "free" || userPlan === "basic") {
           try {
             finalUrl = await addWatermark(imageUrl);
-            const response = await fetch(finalUrl);
-            const blob = await response.blob();
+            const blob = dataURLtoBlob(finalUrl);
             const storagePath = `users/${userId}/${jobId}.png`;
             const imageRef = ref(storage, storagePath);
             await uploadBytes(imageRef, blob);
@@ -1435,6 +1446,7 @@ let mostRecentJobStatus = "";
 
   poll(attempt);
 }
+
 
 
 async function addWatermark(imageUrl) {
