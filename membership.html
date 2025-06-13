@@ -197,59 +197,7 @@
     <a href="/privacy.html">Privacy</a>   |  
     <a href="mailto:animefactory.art@gmail.com">animefactory.art@gmail.com</a>
 </footer>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getAuth } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyB0lJ8jUO77xWV_aLtzbENNcoXWnPiBxbg",
-      authDomain: "ai-image-gen-157dc.firebaseapp.com",
-      projectId: "ai-image-gen-157dc",
-  };
-
-  initializeApp(firebaseConfig);
-  const auth = getAuth();
-
-  const toggle = document.getElementById("billing-toggle");
-
-  toggle.addEventListener("change", () => {
-    const yearly = toggle.checked;
-    document.querySelectorAll(".price").forEach(p => {
-      p.textContent = yearly ? p.dataset.year : p.dataset.month;
-    });
-  });
-
-  document.querySelectorAll(".subscribe-btn").forEach(button => {
-    button.addEventListener("click", async () => {
-      const yearly = toggle.checked;
-      const priceId = yearly ? button.dataset.year : button.dataset.month;
-
-      const user = auth.currentUser;
-      if (!user) {
-        alert("Please log in to subscribe.");
-        return;
-      }
-
-      const idToken = await user.getIdToken();
-
-      fetch("https://animefactory-backend.onrender.com/api/create-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`
-        },
-        body: JSON.stringify({ priceId })
-      });
-
-      const data = await res.json();
-      if (data?.url) {
-        window.location.href = data.url;
-      } else {
-        alert("❌ Failed to start checkout session.");
-      }
-    });
-  });
-</script>
 
   
 <script type="module">
@@ -284,16 +232,17 @@ document.querySelectorAll(".subscribe-btn").forEach(button => {
 
     const idToken = await currentUser.getIdToken();
 
-    fetch("https://animefactory-backend.onrender.com/api/create-checkout-session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${idToken}`
-      },
-      body: JSON.stringify({ priceId })
-    });
+    const res = await fetch("https://animefactory-backend.onrender.com/api/create-checkout-session", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${idToken}`
+  },
+  body: JSON.stringify({ priceId })
+});
 
-    const data = await res.json();
+const data = await res.json();
+
     if (data?.url) {
       window.location.href = data.url;
     } else {
