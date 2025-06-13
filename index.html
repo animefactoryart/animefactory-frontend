@@ -898,7 +898,7 @@ input:focus {
 </div>
 
   <script type="module">
-    const BACKEND_URL = "https://animefactory-backend.onrender.com";
+    
     function escapeHtml(text) {
   return text
     .replace(/&/g, "&amp;")
@@ -1649,18 +1649,18 @@ modal.onclick = () => modal.classList.add("hidden");
    
 
   
-  // === Test Backend Button ===
- window.addEventListener("DOMContentLoaded", () => {
+ const BACKEND_URL = "https://animefactory-backend.onrender.com";
+
+  // Define and assign testAPI globally
   window.testAPI = async function () {
     try {
-      const res = await fetch("https://animefactory-backend.onrender.com/api/job/test");
+      const res = await fetch(`${BACKEND_URL}/api/job/test`);
       const text = await res.text();
       console.log("✅ RESPONSE TEXT:", text);
     } catch (e) {
       console.error("❌ TEST ERROR:", e);
     }
   };
-});
 
   window.testAPI = testAPI;
 
