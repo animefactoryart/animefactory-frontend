@@ -1156,6 +1156,7 @@ for (const job of pendingJobs) {
         },
         statusTracker,
         placeholder
+        
       );
     } else {
       // ✅ Don't poll or show anything for completed/failed jobs
@@ -1352,12 +1353,17 @@ let mostRecentJobStatus = "";
         statusEl.textContent = `${liveStatus} • ${formattedTime}`;
       }
     }
+
+    if (secondsElapsed === 90) {
+      statusP.textContent = "⚠️ This is taking longer than usual. Please wait...";
+    }
   }, 1000);
 
   async function poll(attempt) {
     if (attempt >= MAX_ATTEMPTS) {
       clearInterval(interval);
       progressContainer.classList.add("hidden");
+      statusP.textContent = "❌ Job timed out. Please try again.";
       return;
     }
 
@@ -1366,40 +1372,46 @@ let mostRecentJobStatus = "";
       const data = await res.json();
       const job = data.job;
 
+      console.log("🎯 Job status:", job?.status, job);
+
       progressBar.style.width = `${Math.min(((attempt + 1) / MAX_ATTEMPTS) * 100, 100)}%`;
 
+      const status = job?.status || "UNKNOWN";
       const statusMap = {
         QUEUED: "⏳ In queue – waiting to start...",
         RUNNING: "🔄 Generating – image in progress...",
         SUCCESS: "✅ Success!",
         FAILED: "❌ Generation failed.",
       };
-      const status = job?.status || "UNKNOWN";
       if (placeholderDiv) placeholderDiv.dataset.jobStatusText = statusMap[status] || "⏳ Working...";
 
       if (status === "SUCCESS") {
         clearInterval(interval);
         removeJob(jobId);
         let imageUrl = job.successInfo?.images?.[0]?.url;
-
         let finalUrl = imageUrl;
-        let storagePath = null;
+        let storagePathSaved = null;
 
-        // 🔒 If free/basic plan, watermark and store
         if (userPlan === "free" || userPlan === "basic") {
-          finalUrl = await addWatermark(imageUrl);
-
-          const blob = await (await fetch(finalUrl)).blob();
-          storagePath = `users/${userId}/${jobId}.png`;
-          const imageRef = ref(storage, storagePath);
-          await uploadBytes(imageRef, blob);
-          finalUrl = await getDownloadURL(imageRef);
+          try {
+            finalUrl = await addWatermark(imageUrl);
+            const response = await fetch(finalUrl);
+            const blob = await response.blob();
+            const storagePath = `users/${userId}/${jobId}.png`;
+            const imageRef = ref(storage, storagePath);
+            await uploadBytes(imageRef, blob);
+            finalUrl = await getDownloadURL(imageRef);
+            storagePathSaved = storagePath;
+          } catch (err) {
+            console.warn("❌ Watermarking/upload failed, using original:", err);
+            finalUrl = imageUrl;
+          }
         }
 
         await addDoc(collection(firestore, "users", userId, "images"), {
           url: finalUrl,
           prompt,
-          path: storagePath,
+          path: storagePathSaved,
           createdAt: serverTimestamp(),
         });
 
@@ -1415,6 +1427,7 @@ let mostRecentJobStatus = "";
 
     } catch (err) {
       clearInterval(interval);
+      console.error("❌ Polling error:", err);
       statusP.textContent = `❌ Polling error: ${err.message}`;
       progressContainer.classList.add("hidden");
     }
