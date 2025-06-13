@@ -1651,8 +1651,7 @@ modal.onclick = () => modal.classList.add("hidden");
   
  const BACKEND_URL = "https://animefactory-backend.onrender.com";
 
-  // Define and assign testAPI globally
-  window.testAPI = async function () {
+  async function testAPI() {
     try {
       const res = await fetch(`${BACKEND_URL}/api/job/test`);
       const text = await res.text();
@@ -1660,8 +1659,9 @@ modal.onclick = () => modal.classList.add("hidden");
     } catch (e) {
       console.error("❌ TEST ERROR:", e);
     }
-  };
+  }
 
+  window.testAPI = testAPI;
   
 
 </script>
