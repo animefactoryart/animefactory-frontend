@@ -1662,12 +1662,29 @@ modal.onclick = () => modal.classList.add("hidden");
   }
 
   window.testAPI = testAPI;
-  
+  document.addEventListener("DOMContentLoaded", () => {
+  const testBtn = document.getElementById("test-backend-btn");
+  if (testBtn) {
+    testBtn.addEventListener("click", async () => {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/job/test`);
+        const text = await res.text();
+        console.log("✅ RESPONSE TEXT:", text);
+      } catch (e) {
+        console.error("❌ TEST ERROR:", e);
+      }
+    });
+  } else {
+    console.warn("Test button not found in DOM.");
+  }
+});
+
 
 </script>
 <div style="text-align: center; margin: 40px 0;">
-  <button onclick="testAPI()" style="padding: 12px 24px; font-size: 16px;">Test Backend</button>
+  <button id="test-backend-btn" style="padding: 12px 24px; font-size: 16px;">Test Backend</button>
 </div>
+
 <footer class="site-footer">
   <a href="/terms.html">Terms of Service</a>
   <span class="divider">|</span>
