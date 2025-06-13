@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Membership – AnimeFactory</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #1a1c2b;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    header {
+      padding: 2rem 1rem 1rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtext {
+      color: #ccc;
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .billing-toggle {
+      margin-bottom: 2rem;
+    }
+
+    .plans {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem 1rem;
+      max-width: 1000px;
+      margin: auto;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+    }
+
+    .plan {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      width: 280px;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease;
+    }
+
+    .plan:hover {
+      transform: scale(1.03);
+    }
+
+    .plan .price {
+      font-size: 2rem;
+      font-weight: 600;
+      margin: 0.5rem 0 1rem;
+    }
+
+    .plan ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.5rem;
+    }
+
+    .plan ul li {
+      margin: 0.5rem 0;
+    }
+
+    .plan button {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .plan button:hover {
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+    }
+
+    .popular .tag {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #6366f1, #3b82f6);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
+
+    footer {
+      margin-top: 4rem;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: #888;
+      background: rgba(255,255,255,0.03);
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    a {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .plans {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .plan {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+<h1>Choose Your Membership</h1>
+<p class="subtext">Unlock more generations and premium features</p>
+<div class="billing-toggle">
+<label>
+<input id="billing-toggle" type="checkbox"/>
+    Bill annually <strong>(save 25%)</strong>
+</label>
+</div>
+</header>
+<section class="plans">
+<div class="plan">
+<h2>Basic</h2>
+<p class="price" data-month="€9 / month" data-year="€81 / year">€9 / month</p>
+<!-- update Pro and Premium similarly -->
+<ul>
+<li><strong>300 credits/month</strong></li>
+<li style="color:#f87171;">Watermarked images</li>
+</ul>
+<button class="subscribe-btn" data-month="price_1RZGwdRrjDStXR6K7T9rtdjj" data-year="https://buy.stripe.com/test_basic_year">
+        Subscribe
+      </button>
+</div>
+<div class="plan popular">
+<div class="tag">★ Most Popular</div>
+<h2>Pro</h2>
+<p class="price" data-month="€15 / month" data-year="€135 / year">€15 / month</p>
+<ul>
+<li><strong>600 credits/month</strong></li>
+<li style="color:#4ade80;">No watermark</li>
+</ul>
+<button class="subscribe-btn" data-month="price_1RZGxARrjDStXR6K6i5k60QI" data-year="https://buy.stripe.com/test_pro_year">
+        Subscribe
+      </button>
+</div>
+<div class="plan">
+<h2>Premium</h2>
+<p class="price" data-month="€22 / month" data-year="€198 / year">€22 / month</p>
+<ul>
+<li><strong>1000 credits/month</strong></li>
+<li style="color:#4ade80;">No watermark</li>
+</ul>
+<button class="subscribe-btn" data-month="https://buy.stripe.com/test_premium_month" data-year="https://buy.stripe.com/test_premium_year">
+        Subscribe
+      </button>
+</div>
+</section>
+<footer>
+<a href="/">← Back to Home</a>   |  
+    <a href="/terms.html">Terms</a>   |  
+    <a href="/privacy.html">Privacy</a>   |  
+    <a href="mailto:animefactory.art@gmail.com">animefactory.art@gmail.com</a>
+</footer>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB0lJ8jUO77xWV_aLtzbENNcoXWnPiBxbg",
+      authDomain: "ai-image-gen-157dc.firebaseapp.com",
+      projectId: "ai-image-gen-157dc",
+  };
+
+  initializeApp(firebaseConfig);
+  const auth = getAuth();
+
+  const toggle = document.getElementById("billing-toggle");
+
+  toggle.addEventListener("change", () => {
+    const yearly = toggle.checked;
+    document.querySelectorAll(".price").forEach(p => {
+      p.textContent = yearly ? p.dataset.year : p.dataset.month;
+    });
+  });
+
+  document.querySelectorAll(".subscribe-btn").forEach(button => {
+    button.addEventListener("click", async () => {
+      const yearly = toggle.checked;
+      const priceId = yearly ? button.dataset.year : button.dataset.month;
+
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Please log in to subscribe.");
+        return;
+      }
+
+      const idToken = await user.getIdToken();
+
+      const res = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`
+        },
+        body: JSON.stringify({ priceId })
+      });
+
+      const data = await res.json();
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        alert("❌ Failed to start checkout session.");
+      }
+    });
+  });
+</script>
+
+  
+<script type="module">
+import { auth } from "/static/firebase-init.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+});
+
+
+if (toggle) {
+  toggle.addEventListener("change", () => {
+    const yearly = toggle.checked;
+    document.querySelectorAll(".price").forEach(p => {
+      p.textContent = yearly ? p.dataset.year : p.dataset.month;
+    });
+  });
+}
+
+document.querySelectorAll(".subscribe-btn").forEach(button => {
+  button.addEventListener("click", async () => {
+    const yearly = toggle?.checked ?? false;
+    const priceId = yearly ? button.dataset.year : button.dataset.month;
+
+    if (!currentUser) {
+      alert("Please log in to subscribe.");
+      return;
+    }
+
+    const idToken = await currentUser.getIdToken();
+
+    const res = await fetch("/api/create-checkout-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`
+      },
+      body: JSON.stringify({ priceId })
+    });
+
+    const data = await res.json();
+    if (data?.url) {
+      window.location.href = data.url;
+    } else {
+      alert("❌ Failed to start checkout session.");
+    }
+  });
+});
+</script>
+
+
+</body>
+</html>
