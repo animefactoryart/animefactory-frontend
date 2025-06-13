@@ -1332,42 +1332,31 @@ pollJobStatus(data2.jobId, 0, prompt, (url) => onComplete(url, placeholder2), st
 let mostRecentJobStatus = "";
 
 
-   async function pollJobStatus(jobId, attempt = 0, prompt = "", onComplete = null, statusTracker = { highestPriority: 0 }, placeholderDiv = null) {
-
-
-
-
+  async function pollJobStatus(jobId, attempt = 0, prompt = "", onComplete = null, statusTracker = { highestPriority: 0 }, placeholderDiv = null) {
   const MAX_ATTEMPTS = 500;
   const POLL_INTERVAL = 3000;
   const userId = auth.currentUser.uid;
+  const userDoc = await getDoc(doc(firestore, "users", userId));
+  const userPlan = userDoc.data().plan || 'free';
 
   let secondsElapsed = 0;
-
- // update card status every second
-const interval = setInterval(() => {
-  secondsElapsed++;
-  const minutes = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
-  const seconds = String(secondsElapsed % 60).padStart(2, '0');
-  const formattedTime = `${minutes}:${seconds}`;
-
-  if (placeholderDiv) {
-    const statusEl = placeholderDiv.querySelector(".status-line");
-    if (statusEl) {
-      if (placeholderDiv && statusEl) {
-  const liveStatus = placeholderDiv.dataset.jobStatusText || "⏳ Working...";
-  statusEl.textContent = `${liveStatus} • ${formattedTime}`;
-}
-
+  const interval = setInterval(() => {
+    secondsElapsed++;
+    const minutes = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+    const secondsStr = String(secondsElapsed % 60).padStart(2, '0');
+    const formattedTime = `${minutes}:${secondsStr}`;
+    if (placeholderDiv) {
+      const statusEl = placeholderDiv.querySelector(".status-line");
+      if (statusEl) {
+        const liveStatus = placeholderDiv.dataset.jobStatusText || "⏳ Working...";
+        statusEl.textContent = `${liveStatus} • ${formattedTime}`;
+      }
     }
-  }
-}, 1000);
-
+  }, 1000);
 
   async function poll(attempt) {
     if (attempt >= MAX_ATTEMPTS) {
       clearInterval(interval);
-
-      //statusP.textContent = "❌ Timed out. You can refresh the page later to check.";
       progressContainer.classList.add("hidden");
       return;
     }
@@ -1377,88 +1366,55 @@ const interval = setInterval(() => {
       const data = await res.json();
       const job = data.job;
 
-      const progress = Math.min(((attempt + 1) / MAX_ATTEMPTS) * 100, 100);
-progressBar.style.width = `${progress}%`;
+      progressBar.style.width = `${Math.min(((attempt + 1) / MAX_ATTEMPTS) * 100, 100)}%`;
 
-// Status mapping
-const statusPriority = {
-  "QUEUED": 1,
-  "RUNNING": 2,
-  "SUCCESS": 3,
-  "FAILED": 4,
-  "UNKNOWN": 0
-};
+      const statusMap = {
+        QUEUED: "⏳ In queue – waiting to start...",
+        RUNNING: "🔄 Generating – image in progress...",
+        SUCCESS: "✅ Success!",
+        FAILED: "❌ Generation failed.",
+      };
+      const status = job?.status || "UNKNOWN";
+      if (placeholderDiv) placeholderDiv.dataset.jobStatusText = statusMap[status] || "⏳ Working...";
 
-let currentStatus = job?.status || "UNKNOWN";
-let statusText = "⏳ In queue – waiting to start...";
-if (placeholderDiv) {
-  placeholderDiv.dataset.jobStatusText = statusText;
-}
+      if (status === "SUCCESS") {
+        clearInterval(interval);
+        removeJob(jobId);
+        let imageUrl = job.successInfo?.images?.[0]?.url;
 
+        let finalUrl = imageUrl;
+        let storagePath = null;
 
-if (currentStatus === "RUNNING") statusText = "🔄 Generating – image in progress...";
-if (placeholderDiv) placeholderDiv.dataset.jobStatusText = statusText;
+        // 🔒 If free/basic plan, watermark and store
+        if (userPlan === "free" || userPlan === "basic") {
+          finalUrl = await addWatermark(imageUrl);
 
-else if (currentStatus === "SUCCESS") statusText = "✅ Success!";
-if (placeholderDiv) placeholderDiv.dataset.jobStatusText = statusText;
+          const blob = await (await fetch(finalUrl)).blob();
+          storagePath = `users/${userId}/${jobId}.png`;
+          const imageRef = ref(storage, storagePath);
+          await uploadBytes(imageRef, blob);
+          finalUrl = await getDownloadURL(imageRef);
+        }
 
-else if (currentStatus === "FAILED") statusText = "❌ Generation failed.";
-if (placeholderDiv) placeholderDiv.dataset.jobStatusText = statusText;
+        await addDoc(collection(firestore, "users", userId, "images"), {
+          url: finalUrl,
+          prompt,
+          path: storagePath,
+          createdAt: serverTimestamp(),
+        });
 
-
-const priority = statusPriority[currentStatus] || 0;
-
-if (priority >= statusTracker.highestPriority) {
-  statusTracker.highestPriority = priority;
-
-  const minutes = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
-  const seconds = String(secondsElapsed % 60).padStart(2, '0');
-  const formattedTime = `${minutes}:${seconds}`;
-
- if (placeholderDiv) {
-  const statusEl = placeholderDiv.querySelector(".status-line");
-  if (statusEl) {
-    //statusEl.textContent = "❌ Generation failed or timed out.";
-  }
-}
-
-}
-
-if (job?.status === "SUCCESS") {
-  clearInterval(interval);
-
-  removeJob(jobId);
-
-  const imageUrl = job.successInfo?.images?.[0]?.url;
-  const userDoc = await getDoc(doc(firestore, "users", userId));
-  const userPlan = userDoc.data().plan || 'free';
-
-  let finalImageUrl = imageUrl;
-  if (userPlan === 'free' || userPlan === 'basic') {
-    finalImageUrl = await addWatermark(imageUrl);
-  }
-
-  await addDoc(collection(firestore, "users", userId, "images"), {
-    url: imageUrl,
-    prompt,
-    path: null,
-    createdAt: serverTimestamp(),
-  });
-
-  if (onComplete) onComplete(finalImageUrl);
-} else if (job?.status === "FAILED") {
-  clearInterval(interval);
-
-  removeJob(jobId);
-  statusP.textContent = "❌ Generation failed.";
-  progressContainer.classList.add("hidden");
-} else {
-  setTimeout(() => poll(attempt + 1), POLL_INTERVAL);
-}
+        if (onComplete) onComplete(finalUrl, placeholderDiv);
+      } else if (status === "FAILED") {
+        clearInterval(interval);
+        removeJob(jobId);
+        progressContainer.classList.add("hidden");
+        statusP.textContent = "❌ Generation failed.";
+      } else {
+        setTimeout(() => poll(attempt + 1), POLL_INTERVAL);
+      }
 
     } catch (err) {
       clearInterval(interval);
-
       statusP.textContent = `❌ Polling error: ${err.message}`;
       progressContainer.classList.add("hidden");
     }
@@ -1466,6 +1422,7 @@ if (job?.status === "SUCCESS") {
 
   poll(attempt);
 }
+
 
 async function addWatermark(imageUrl) {
   return new Promise((resolve, reject) => {
@@ -1551,21 +1508,11 @@ showLoginBtn.onclick = () => {
   );
   const querySnapshot = await getDocs(q);
 
-  const userDoc = await getDoc(doc(firestore, "users", userId));
-  const userPlan = userDoc.data().plan || "free";
+  imageFeed.innerHTML = `<p class="status-line">🔄 Loading your images...</p>`;
 
   for (const docSnap of querySnapshot.docs) {
     const data = docSnap.data();
-    let imageUrl = data.url;
-
-    try {
-      if (userPlan === "free" || userPlan === "basic") {
-        imageUrl = await addWatermark(imageUrl);
-      }
-    } catch (e) {
-      console.warn("Skipping expired image:", e.message);
-      continue;
-    }
+    const imageUrl = data.url;
 
     const div = document.createElement("div");
     div.classList.add("prompt-card");
@@ -1573,7 +1520,6 @@ showLoginBtn.onclick = () => {
       <img src="${imageUrl}" />
       <div>
         <small><b>Prompt:</b> ${escapeHtml(data.prompt)}</small><br>
-        
         <div class="card-buttons">
           <button class="action-btn download-btn" data-url="${imageUrl}">Download</button>
           <button class="action-btn delete-btn">Delete</button>
@@ -1582,10 +1528,12 @@ showLoginBtn.onclick = () => {
     `;
 
     div.querySelector(".delete-btn").onclick = () =>
-      deleteImage(userId, docSnap.id, div);
+      deleteImage(userId, docSnap.id, data.path || null);
 
     imageFeed.appendChild(div);
   }
+
+  imageFeed.querySelector(".status-line")?.remove();
 }
 
 
