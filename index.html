@@ -1333,7 +1333,7 @@ pollJobStatus(data2.jobId, 0, prompt, (url) => onComplete(url, placeholder2), st
 let mostRecentJobStatus = "";
 
 
-  function dataURLtoBlob(dataUrl) {
+function dataURLtoBlob(dataUrl) {
   const arr = dataUrl.split(',');
   const mime = arr[0].match(/:(.*?);/)[1];
   const bstr = atob(arr[1]);
@@ -1407,12 +1407,13 @@ async function pollJobStatus(jobId, attempt = 0, prompt = "", onComplete = null,
         if (userPlan === "free" || userPlan === "basic") {
           try {
             finalUrl = await addWatermark(imageUrl);
-            const blob = dataURLtoBlob(finalUrl);
+            const blob = dataURLtoBlob(finalUrl); // ✅ FIX: convert canvas output to Blob
             const storagePath = `users/${userId}/${jobId}.png`;
             const imageRef = ref(storage, storagePath);
             await uploadBytes(imageRef, blob);
             finalUrl = await getDownloadURL(imageRef);
             storagePathSaved = storagePath;
+            console.log("✅ Uploaded watermarked image:", finalUrl);
           } catch (err) {
             console.warn("❌ Watermarking/upload failed, using original:", err);
             finalUrl = imageUrl;
@@ -1446,6 +1447,7 @@ async function pollJobStatus(jobId, attempt = 0, prompt = "", onComplete = null,
 
   poll(attempt);
 }
+
 
 
 
