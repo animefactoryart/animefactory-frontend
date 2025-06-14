@@ -633,6 +633,23 @@ transition: color 0.2s;
 .header-nav a:hover {
 color: #3b82f6;
 }
+.mobile-menu.hidden {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .hamburger {
+    display: none !important;
+  }
+
+  .mobile-menu {
+    display: none !important;
+  }
+
+  .header-nav {
+    display: flex !important;
+  }
+}
 
 .header-right {
 display: flex;
@@ -915,15 +932,20 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 <div class="header-left">
 <a href="/" class="site-name-glass">Anime<span class="glow">Factory</span></a>
 
+<nav class="header-nav">
+  <a href="/">Generate</a>
+  <a href="/membership">Membership</a>
+</nav>
 
 <!-- Hamburger icon (visible on mobile only) -->
 <div class="hamburger" id="menu-toggle">☰</div>
 
 <!-- Hidden menu (toggle this on mobile) -->
-<nav class="mobile-menu hidden" id="mobile-nav">
+<nav class="mobile-menu" id="mobile-nav">
   <a href="/">Generate</a>
   <a href="/membership">Membership</a>
 </nav>
+
 
 
 </div>
@@ -1725,10 +1747,22 @@ console.error("❌ TEST ERROR:", e);
 }
 }
 
-  document.getElementById("menu-toggle").addEventListener("click", () => {
-    const nav = document.getElementById("mobile-nav");
-    nav.classList.toggle("show");
+  const menuToggle = document.getElementById("menu-toggle");
+const mobileNav = document.getElementById("mobile-nav");
+
+menuToggle.addEventListener("click", () => {
+  mobileNav.classList.toggle("show");
+  mobileNav.classList.toggle("hidden");
+});
+
+// Auto-close on link click
+document.querySelectorAll("#mobile-nav a").forEach(link => {
+  link.addEventListener("click", () => {
+    mobileNav.classList.remove("show");
+    mobileNav.classList.add("hidden");
   });
+});
+
 document.querySelectorAll("#mobile-nav a").forEach(link => {
   link.addEventListener("click", () => {
     document.getElementById("mobile-nav").classList.remove("show");
