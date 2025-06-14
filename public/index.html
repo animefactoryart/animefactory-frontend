@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AI Image Generator</title>
+<title>AnimeFactory - AI Art Generator</title>
 <style>
 .form-container {
 position: absolute;
@@ -1061,6 +1061,11 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 <input id="password" type="password" placeholder="Password" />
 <button id="auth-submit">Submit</button>
 <button id="auth-cancel" type="button">Cancel</button>
+<hr style="margin: 1rem 0; border-color: rgba(255,255,255,0.1);" />
+
+<button id="google-login" class="signup-btn" style="margin-top: 1rem;">
+  <i class="fab fa-google" style="margin-right: 6px;"></i> Sign in with Google
+</button>
 
 <p id="modal-status"></p>
 </div>
@@ -1117,8 +1122,39 @@ img: "/examples/selfie.png"
 }
 ];
 window.addEventListener("DOMContentLoaded", () => {
-renderExampleCards();
+  renderExampleCards();
 
+  // Google login button logic
+  const googleLoginBtn = document.getElementById("google-login");
+  if (googleLoginBtn) {
+    googleLoginBtn.addEventListener("click", async () => {
+      const provider = new GoogleAuthProvider();
+      try {
+        const result = await signInWithPopup(auth, provider);
+        console.log("✅ Google sign-in success:", result.user);
+
+        // Create Firestore doc if needed
+        const userRef = doc(firestore, "users", result.user.uid);
+        const userSnap = await getDoc(userRef);
+        if (!userSnap.exists()) {
+          await setDoc(userRef, {
+            credits: 0,
+            plan: "free",
+            lastRenewed: serverTimestamp(),
+          });
+        }
+
+        // Hide modal and reset fields
+        authModal.classList.add("hidden");
+        emailInput.value = "";
+        passwordInput.value = "";
+        modalStatus.textContent = "";
+      } catch (error) {
+        console.error("❌ Google login failed:", error.message);
+        modalStatus.textContent = "Google sign-in failed: " + error.message;
+      }
+    });
+  }
 });
 async function resumePendingJobs() {
   if (!auth.currentUser) return;
@@ -1210,7 +1246,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebas
 import {
 getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
 onAuthStateChanged, signOut,
-setPersistence, browserLocalPersistence
+setPersistence, browserLocalPersistence,
+  GoogleAuthProvider,
+  signInWithPopup
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
 import {
