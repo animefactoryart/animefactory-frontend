@@ -913,13 +913,18 @@ renderExampleCards();
 
 });
 async function resumePendingJobs() {
-  if (!auth.currentUser) return; // ❗ Required: user must be logged in
+  if (!auth.currentUser) return;
 
   const pendingJobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
+
   for (const job of pendingJobs) {
     try {
+      console.log("Resuming job", job.jobId);
       const res = await fetch(`${BACKEND_URL}/api/job/${job.jobId}`);
-      const data = await res.json();
+      const text = await res.text();
+      console.log("Raw response:", text);
+
+      const data = JSON.parse(text);
       const jobData = data.job;
 
       if (jobData?.status === "QUEUED" || jobData?.status === "RUNNING") {
@@ -928,9 +933,7 @@ async function resumePendingJobs() {
         placeholder.innerHTML = `<div class="status-line">⏳ Resuming job...</div>`;
         imageFeed.prepend(placeholder);
 
-        const completed = { count: 0 };
         const statusTracker = { highestPriority: 0 };
-
         pollJobStatus(
           job.jobId,
           0,
@@ -940,7 +943,6 @@ async function resumePendingJobs() {
               <img src="${url}" />
               <div>
                 <small><b>Prompt:</b> ${escapeHtml(job.prompt)}</small><br>
-                <small>Generated just now</small>
                 <div class="card-buttons">
                   <button class="action-btn download-btn" data-url="${url}">Download</button>
                 </div>
@@ -954,10 +956,11 @@ async function resumePendingJobs() {
         removeJob(job.jobId);
       }
     } catch (err) {
-      console.error("❌ Error resuming job:", err);
+      console.error("❌ resumePendingJobs error:", err.message);
     }
   }
 }
+
 
 
 function renderExampleCards() {
