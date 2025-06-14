@@ -1153,12 +1153,12 @@ userEmail.innerHTML = `
 
 
 
-
+await resumePendingJobs();
 //generateForm.classList.remove("hidden");
 await loadUserImages(user.uid);
 const pendingJobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
 
-await resumePendingJobs();
+
 
 
 
@@ -1527,7 +1527,11 @@ orderBy("createdAt", "desc")
 );
 const querySnapshot = await getDocs(q);
 
-imageFeed.innerHTML = `<p class="status-line">🔄 Loading your images...</p>`;
+const loadingMsg = document.createElement("p");
+loadingMsg.className = "status-line";
+loadingMsg.textContent = "🔄 Loading your images...";
+imageFeed.appendChild(loadingMsg);
+
 
 for (const docSnap of querySnapshot.docs) {
 const data = docSnap.data();
@@ -1551,6 +1555,7 @@ imageFeed.appendChild(div);
 }
 
 imageFeed.querySelector(".status-line")?.remove();
+
 }
 
 
