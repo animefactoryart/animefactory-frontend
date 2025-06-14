@@ -870,7 +870,11 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 </div>
 
 <p id="status"></p>
-<div id="image-feed"></div>
+<div id="image-feed-wrapper">
+  <div id="pending-jobs-feed"></div>
+  <div id="image-feed"></div>
+</div>
+
 <div id="image-sections" style="margin-top: 2rem; width: 100%; max-width: 960px;">
 <div id="user-images-section" class="card-section"></div>
 <h2 style="margin-top: 2rem;">Try these examples</h2>
@@ -1119,7 +1123,8 @@ if (jobData?.status === "QUEUED" || jobData?.status === "RUNNING") {
 const placeholder = document.createElement("div");
 placeholder.classList.add("prompt-card");
 placeholder.innerHTML = `<div class="status-line">⏳ Resuming job...</div>`;
-imageFeed.prepend(placeholder);
+document.getElementById("pending-jobs-feed").prepend(placeholder);
+
 
 const completed = { count: 0 };
 const statusTracker = { highestPriority: 0 };
