@@ -899,33 +899,40 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 </head>
 <body>
 <header class="site-header">
-<div class="header-left">
-  <div class="hamburger" id="menu-toggle">☰</div>
-  <a href="/" class="site-name-glass">Anime<span class="glow">Factory</span></a>
-</div>
+  <div class="header-left">
+    <div class="hamburger" id="menu-toggle">☰</div>
+    <a href="/" class="site-name-glass">Anime<span class="glow">Factory</span></a>
+  </div>
 
-<nav class="header-nav">
-  <a href="/">Generate</a>
-  <a href="/membership">Membership</a>
-</nav>
+  <!-- Desktop Nav -->
+  <nav class="header-nav">
+    <a href="/">Generate</a>
+    <a href="/membership">Membership</a>
+  </nav>
 
-<nav class="mobile-menu" id="mobile-nav">
-  <a href="/">Generate</a>
-  <a href="/membership">Membership</a>
-</nav>
+  <!-- Mobile Menu Drawer -->
+  <nav class="mobile-menu" id="mobile-nav">
+    <a href="/">Generate</a>
+    <a href="/membership">Membership</a>
+  </nav>
 
+  <div class="header-right" id="auth-area">
+    <div id="auth-buttons">
+      <!-- Desktop Buttons -->
+      <button id="show-login" class="login-btn">Log In</button>
+      <button id="show-signup" class="signup-btn">Sign Up</button>
 
-<div class="header-right" id="auth-area">
-<div id="auth-buttons">
-<button id="show-login" class="login-btn">Log In</button>
-<button id="show-signup" class="signup-btn">Sign Up</button>
-</div>
-<div id="user-menu" class="hidden">
-<span id="user-email"></span>
-<button id="logout-btn" class="login-btn">Log Out</button>
-</div>
-</div>
+      <!-- Mobile-Only Button -->
+      <button id="mobile-login-button" class="signup-btn">Log In</button>
+    </div>
+
+    <div id="user-menu" class="hidden">
+      <span id="user-email"></span>
+      <button id="logout-btn" class="login-btn">Log Out</button>
+    </div>
+  </div>
 </header>
+
 <div id="auth-modal" class="hidden">
 <div id="auth-modal-content">
 <div id="auth-tabs">
