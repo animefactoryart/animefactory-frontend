@@ -1,211 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
- 
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI Image Generator</title>
-  <style>
-    .form-container {
-  position: absolute;
-  top: 20vh; /* 75% of the viewport height */
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Image Generator</title>
+<style>
+.form-container {
+position: absolute;
+top: 20vh; /* 75% of the viewport height */
+left: 50%;
+transform: translate(-50%, -50%);
+width: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1;
 }
 
 
-   #image-feed {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center; /* or flex-start if you want left-align */
-  padding-top: 1rem;
+#image-feed {
+display: flex;
+flex-wrap: wrap;
+gap: 1rem;
+justify-content: center; /* or flex-start if you want left-align */
+padding-top: 1rem;
 }
 
 #image-feed > div {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 1rem;
-  border-radius: 16px;
-  max-width: 300px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease;
-  overflow: hidden;
+display: flex;
+flex-direction: column;
+align-items: stretch;
+background: rgba(255, 255, 255, 0.04);
+padding: 1rem;
+border-radius: 16px;
+max-width: 300px;
+box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+transition: transform 0.2s ease;
+overflow: hidden;
 }
 
 #image-feed img {
-  max-width: 100%;
-  border-radius: 12px;
-  margin-bottom: 0.75rem;
+max-width: 100%;
+border-radius: 12px;
+margin-bottom: 0.75rem;
 }
 .card-buttons {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-  flex-wrap: wrap;
-  justify-content: center;
+display: flex;
+gap: 0.5rem;
+margin-top: 0.75rem;
+flex-wrap: wrap;
+justify-content: center;
 }
 .action-btn {
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
-  text-align: center;
-  border: none;
-  cursor: pointer;
-  transition: 0.3s ease all;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
-  color: white;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 4px 15px rgba(0, 140, 255, 0.2);
+padding: 0.5rem 1rem;
+border-radius: 8px;
+font-size: 0.95rem;
+font-weight: 600;
+text-decoration: none;
+text-align: center;
+border: none;
+cursor: pointer;
+transition: 0.3s ease all;
+background: linear-gradient(135deg, #3b82f6, #6366f1);
+color: white;
+backdrop-filter: blur(8px);
+-webkit-backdrop-filter: blur(8px);
+box-shadow: 0 4px 15px rgba(0, 140, 255, 0.2);
 }
 .action-btn:hover {
-  background: linear-gradient(135deg, #2563eb, #4f46e5);
-  transform: translateY(-1px);
+background: linear-gradient(135deg, #2563eb, #4f46e5);
+transform: translateY(-1px);
 }
 #auth-modal-content,
 #generate-form,
 
 
 #generate-form {
-   padding-top: 64px; /* match the header height */
-  background: transparent !important;
-  border: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  box-shadow: none !important;
+padding-top: 64px; /* match the header height */
+background: transparent !important;
+border: none !important;
+backdrop-filter: none !important;
+-webkit-backdrop-filter: none !important;
+box-shadow: none !important;
 }
 
-   body {
-  font-family: 'Inter', sans-serif;
-  color: #f0f0f0;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  overflow-x: hidden;
-  min-height: 100vh;
-  background: #1a1c2b; /* fallback solid color */
-  overflow-x: hidden;
+body {
+font-family: 'Inter', sans-serif;
+color: #f0f0f0;
+padding: 1rem;
+display: flex;
+flex-direction: column;
+align-items: center;
+position: relative;
+overflow-x: hidden;
+min-height: 100vh;
+background: #1a1c2b; /* fallback solid color */
+overflow-x: hidden;
 }
 
 
 
-    .hidden { display: none !important; }
-    #image-feed > div {
-      margin-bottom: 1rem;
-      padding: 0.5rem;
-      background: #222;
-      border-radius: 8px;
-    }
-    #image-feed img {
-      max-width: 300px;
-      border-radius: 4px;
-    }
-    #progress-container {
-      background: #444;
-      border-radius: 6px;
-      overflow: hidden;
-      height: 20px;
-      margin: 1rem 0;
-    }
-    #progress-bar {
-      height: 100%;
-      width: 0%;
-      background: #0af;
-      transition: width 0.3s ease;
-    }
-    #cancel-btn {
-      background: #f33;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      margin-top: 0.5rem;
-      cursor: pointer;
-    }
-    .download-btn {
-      margin-top: 0.25rem;
-      display: inline-block;
-      background: #08f;
-      color: white;
-      padding: 0.25rem 0.5rem;
-      border: none;
-      border-radius: 4px;
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-    #top-header {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 1000;
+.hidden { display: none !important; }
+#image-feed > div {
+margin-bottom: 1rem;
+padding: 0.5rem;
+background: #222;
+border-radius: 8px;
+}
+#image-feed img {
+max-width: 300px;
+border-radius: 4px;
+}
+#progress-container {
+background: #444;
+border-radius: 6px;
+overflow: hidden;
+height: 20px;
+margin: 1rem 0;
+}
+#progress-bar {
+height: 100%;
+width: 0%;
+background: #0af;
+transition: width 0.3s ease;
+}
+#cancel-btn {
+background: #f33;
+color: white;
+border: none;
+padding: 0.5rem 1rem;
+border-radius: 4px;
+margin-top: 0.5rem;
+cursor: pointer;
+}
+.download-btn {
+margin-top: 0.25rem;
+display: inline-block;
+background: #08f;
+color: white;
+padding: 0.25rem 0.5rem;
+border: none;
+border-radius: 4px;
+text-decoration: none;
+font-size: 0.9rem;
+}
+#top-header {
+position: absolute;
+top: 1rem;
+right: 1rem;
+z-index: 1000;
 }
 
 #top-header button {
-  background: #08f;
-  color: white;
-  border: none;
-  padding: 0.4rem 0.75rem;
-  margin-left: 0.5rem;
-  border-radius: 4px;
-  cursor: pointer;
+background: #08f;
+color: white;
+border: none;
+padding: 0.4rem 0.75rem;
+margin-left: 0.5rem;
+border-radius: 4px;
+cursor: pointer;
 }
 
 #user-menu span {
-  margin-right: 0.5rem;
+margin-right: 0.5rem;
 }
 /* Center main content */
 body {
-  font-family: 'Inter', sans-serif;
-  color: #eee;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  overflow-x: hidden;
-  min-height: 100vh;
-  z-index: 0;
+font-family: 'Inter', sans-serif;
+color: #eee;
+padding: 1rem;
+display: flex;
+flex-direction: column;
+align-items: center;
+position: relative;
+overflow-x: hidden;
+min-height: 100vh;
+z-index: 0;
 }
 
 body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at top left, rgba(100, 150, 255, 0.2), transparent 60%),
-              radial-gradient(circle at bottom right, rgba(180, 100, 255, 0.15), transparent 60%),
-              radial-gradient(circle at center, rgba(255, 255, 255, 0.05), transparent 60%);
-  background-color: #1a1c2b; /* base color */
-  z-index: -1;
-  pointer-events: none;
-  filter: blur(24px) brightness(1.15);
+content: "";
+position: fixed;
+inset: 0;
+background: radial-gradient(circle at top left, rgba(100, 150, 255, 0.2), transparent 60%),
+radial-gradient(circle at bottom right, rgba(180, 100, 255, 0.15), transparent 60%),
+radial-gradient(circle at center, rgba(255, 255, 255, 0.05), transparent 60%);
+background-color: #1a1c2b; /* base color */
+z-index: -1;
+pointer-events: none;
+filter: blur(24px) brightness(1.15);
 }
 
 @keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+0% {
+background-position: 0% 50%;
+}
+50% {
+background-position: 100% 50%;
+}
+100% {
+background-position: 0% 50%;
+}
 }
 
 
@@ -213,109 +213,109 @@ body::before {
 /* Center and style prompt input */
 /* Generate form layout */
 #generate-form {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0rem;
-  width: 100%;
-  max-width: 600px;
+display: flex;
+flex-direction: column;
+align-items: stretch;
+gap: 0rem;
+width: 100%;
+max-width: 600px;
 }
 #modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+position: fixed;
+inset: 0;
+background: rgba(0, 0, 0, 0.8);
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 9999;
 }
 
 #modal-img {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 12px;
-  box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
+max-width: 90%;
+max-height: 90%;
+border-radius: 12px;
+box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
 }
 
 /* Prompt input styling */
 #prompt-input {
-  border: none;
-  width: 94.5%;
-  padding: 1rem;
-  border-radius: 12px 12px 0 0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
-  font-size: 1rem;
-  font-family: 'Inter', sans-serif;
-  backdrop-filter: blur(12px);
-  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.05);
-  transition: 0.3s ease;
-  resize: none;
+border: none;
+width: 94.5%;
+padding: 1rem;
+border-radius: 12px 12px 0 0;
+border: 1px solid rgba(255, 255, 255, 0.1);
+background: rgba(255, 255, 255, 0.05);
+color: #fff;
+font-size: 1rem;
+font-family: 'Inter', sans-serif;
+backdrop-filter: blur(12px);
+box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.05);
+transition: 0.3s ease;
+resize: none;
 }
 
 #prompt-input:focus {
-  outline: none;
-  border-color: rgba(0, 140, 255, 0.4);
-  box-shadow: 0 0 8px rgba(0, 140, 255, 0.25);
+outline: none;
+border-color: rgba(0, 140, 255, 0.4);
+box-shadow: 0 0 8px rgba(0, 140, 255, 0.25);
 }
 
 /* Generate button - full width and animated */
 #generate-form button[type="submit"] {
-  width: 100%;
-  padding: 1rem;
-  border: none;
-  border-radius: 0 0 12px 12px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, rgba(0,140,255,0.9), rgba(100,0,255,0.75));
-  color: white;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: background 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 4px 15px rgba(0, 140, 255, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+width: 100%;
+padding: 1rem;
+border: none;
+border-radius: 0 0 12px 12px;
+font-size: 1.1rem;
+font-weight: 700;
+background: linear-gradient(135deg, rgba(0,140,255,0.9), rgba(100,0,255,0.75));
+color: white;
+cursor: pointer;
+position: relative;
+overflow: hidden;
+transition: background 0.3s ease, transform 0.2s ease;
+box-shadow: 0 4px 15px rgba(0, 140, 255, 0.3);
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 0.5rem;
+backdrop-filter: blur(8px);
+-webkit-backdrop-filter: blur(8px);
 }
 
 /* Sparkle/shine animation */
 #generate-form button[type="submit"]::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.25), transparent 60%);
-  transform: rotate(25deg);
-  animation: pulse-shine 2.5s infinite;
-  pointer-events: none;
+content: "";
+position: absolute;
+top: -50%;
+left: -50%;
+width: 200%;
+height: 200%;
+background: radial-gradient(circle at center, rgba(255,255,255,0.25), transparent 60%);
+transform: rotate(25deg);
+animation: pulse-shine 2.5s infinite;
+pointer-events: none;
 }
 
 @keyframes pulse-shine {
-  0% {
-    transform: translateX(-100%) rotate(25deg);
-    opacity: 0;
-  }
-  50% {
-    transform: translateX(0%) rotate(25deg);
-    opacity: 0.4;
-  }
-  100% {
-    transform: translateX(100%) rotate(25deg);
-    opacity: 0;
-  }
+0% {
+transform: translateX(-100%) rotate(25deg);
+opacity: 0;
+}
+50% {
+transform: translateX(0%) rotate(25deg);
+opacity: 0.4;
+}
+100% {
+transform: translateX(100%) rotate(25deg);
+opacity: 0;
+}
 }
 
 /* Hover effect */
 #generate-form button[type="submit"]:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 160, 255, 0.5);
+transform: translateY(-2px);
+box-shadow: 0 6px 20px rgba(0, 160, 255, 0.5);
 }
 
 
@@ -327,26 +327,26 @@ body::before {
 /* Buttons - modern style */
 button,
 .download-btn {
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  font-family: 'Inter', sans-serif;
-  cursor: pointer;
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+background: rgba(255, 255, 255, 0.06);
+color: #fff;
+border: 1px solid rgba(255, 255, 255, 0.2);
+border-radius: 10px;
+padding: 0.6rem 1.2rem;
+font-size: 1rem;
+font-weight: 600;
+font-family: 'Inter', sans-serif;
+cursor: pointer;
+backdrop-filter: blur(12px) saturate(180%);
+-webkit-backdrop-filter: blur(12px) saturate(180%);
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+transition: all 0.3s ease;
 }
 
 button:hover {
-  color: #fff;
-  background: rgba(0, 150, 255, 0.2);
-  border-color: rgba(0, 150, 255, 0.4);
-  box-shadow: 0 6px 24px rgba(0, 150, 255, 0.4);
+color: #fff;
+background: rgba(0, 150, 255, 0.2);
+border-color: rgba(0, 150, 255, 0.4);
+box-shadow: 0 6px 24px rgba(0, 150, 255, 0.4);
 }
 
 
@@ -356,166 +356,166 @@ button:hover {
 
 /* Cancel button red variant */
 #cancel-btn {
-  background: #f33;
+background: #f33;
 }
 
 #cancel-btn:hover {
-  background: #f55;
+background: #f55;
 }
 
 /* Auth buttons at top */
 #top-header button {
-  background: #08f;
-  margin-left: 0.5rem;
+background: #08f;
+margin-left: 0.5rem;
 }
 
 #top-header button:hover {
-  background: #0af;
+background: #0af;
 }
 #auth-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+position: fixed;
+inset: 0;
+background: rgba(0, 0, 0, 0.8);
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 9999;
 }
 
 #auth-modal-content {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 16px;
-  padding: 2rem;
-  width: 100%;
-  max-width: 420px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
-  font-family: 'Poppins', sans-serif;
+background: rgba(255, 255, 255, 0.05);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+border-radius: 16px;
+padding: 2rem;
+width: 100%;
+max-width: 420px;
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+border: 1px solid rgba(255, 255, 255, 0.15);
+color: #fff;
+font-family: 'Poppins', sans-serif;
 }
 
 #auth-modal-content input {
-  width: 100%;
-  padding: 0.8rem 1rem;
-  margin-bottom: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-  border-radius: 10px;
-  font-size: 1rem;
-  outline: none;
+width: 100%;
+padding: 0.8rem 1rem;
+margin-bottom: 1rem;
+border: 1px solid rgba(255, 255, 255, 0.2);
+background: rgba(255, 255, 255, 0.08);
+color: #fff;
+border-radius: 10px;
+font-size: 1rem;
+outline: none;
 }
 
 #auth-modal-content input::placeholder {
-  color: #ccc;
+color: #ccc;
 }
 
 #auth-modal-content button {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  margin-top: 0.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
-  color: white;
-  transition: background 0.3s ease;
+width: 100%;
+padding: 0.75rem 1rem;
+margin-top: 0.5rem;
+font-size: 1rem;
+font-weight: 600;
+border: none;
+border-radius: 10px;
+cursor: pointer;
+background: linear-gradient(135deg, #3b82f6, #6366f1);
+color: white;
+transition: background 0.3s ease;
 }
 
 #auth-modal-content button:hover {
-  background: linear-gradient(135deg, #2563eb, #4f46e5);
+background: linear-gradient(135deg, #2563eb, #4f46e5);
 }
 
 #auth-tabs {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
+display: flex;
+justify-content: space-between;
+margin-bottom: 1.5rem;
 }
 
 #auth-tabs button {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: #ccc;
-  padding: 0.5rem;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
+flex: 1;
+background: transparent;
+border: none;
+color: #ccc;
+padding: 0.5rem;
+font-size: 1rem;
+font-weight: bold;
+cursor: pointer;
+border-bottom: 2px solid transparent;
 }
 
 #auth-tabs button.active {
-  color: #fff;
-  border-bottom: 2px solid #3b82f6;
+color: #fff;
+border-bottom: 2px solid #3b82f6;
 }
 
 /* Footer styling */
 .site-footer {
-  margin-top: auto;
-  padding: 1.5rem;
-  text-align: center;
-  color: #aaa;
-  font-size: 0.9rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
-  width: 100%;
+margin-top: auto;
+padding: 1.5rem;
+text-align: center;
+color: #aaa;
+font-size: 0.9rem;
+background: rgba(255, 255, 255, 0.03);
+border-top: 1px solid rgba(255, 255, 255, 0.08);
+backdrop-filter: blur(6px);
+-webkit-backdrop-filter: blur(6px);
+box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
+width: 100%;
 }
 .prompt-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* vertically center */
-  align-items: center;     /* horizontally center */
-  min-height: 300px;
-  text-align: center;
+display: flex;
+flex-direction: column;
+justify-content: center; /* vertically center */
+align-items: center;     /* horizontally center */
+min-height: 300px;
+text-align: center;
 }
 
 .status-line {
-  font-size: 1rem;
-  color: #ccc;
-  font-style: italic;
+font-size: 1rem;
+color: #ccc;
+font-style: italic;
 }
 
 .site-footer a {
-  color: #9ca3af; /* light gray-blue tone */
-  text-decoration: none;
-  margin: 0 0.5rem;
-  font-weight: 400;
+color: #9ca3af; /* light gray-blue tone */
+text-decoration: none;
+margin: 0 0.5rem;
+font-weight: 400;
 }
 
 
 .site-footer a:hover {
-  text-decoration: underline;
+text-decoration: underline;
 }
 
 .site-footer .divider {
-  margin: 0 0.25rem;
-  color: #666;
+margin: 0 0.25rem;
+color: #666;
 }
 html, body {
-  height: 100%;
+height: 100%;
 }
 
 body {
-  display: flex;
-  flex-direction: column;
+display: flex;
+flex-direction: column;
 }
 #example-cards .prompt-card img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  display: block;
+max-width: 100%;
+height: auto;
+border-radius: 8px;
+display: block;
 }
 
 #auth-tabs button.active {
-  color: #fff;
-  border-bottom: 2px solid #08f;
+color: #fff;
+border-bottom: 2px solid #08f;
 }
 .prompt-box,
 .prompt-box:hover,
@@ -526,829 +526,791 @@ textarea:focus,
 input,
 input:hover,
 input:focus {
-  cursor: text !important;
+cursor: text !important;
 }
 /* Fixed full-width header */
 .site-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 64px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1.5rem; /* moderate padding */
-  background-color: #111827;
-  color: #f9fafb;
-  border-bottom: 1px solid #1f2937;
-  z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  overflow-x: hidden;
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+height: 64px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 0 1.5rem; /* moderate padding */
+background-color: #111827;
+color: #f9fafb;
+border-bottom: 1px solid #1f2937;
+z-index: 1000;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+overflow-x: hidden;
 }
 
 
 
 /* Site name style */
 .site-name {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #f9fafb;
-  text-decoration: none;
+font-size: 1.5rem;
+font-weight: 700;
+color: #f9fafb;
+text-decoration: none;
 }
 
 /* Navigation links */
 .header-center a {
-  margin: 0 1rem;
-  font-size: 1rem;
-  color: #d1d5db; /* lighter gray */
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
+margin: 0 1rem;
+font-size: 1rem;
+color: #d1d5db; /* lighter gray */
+text-decoration: none;
+font-weight: 500;
+transition: color 0.2s;
 }
 .header-center a:hover {
-  color: #3b82f6; /* vibrant blue */
+color: #3b82f6; /* vibrant blue */
 }
 /* Right buttons */
 .header-right .login-btn,
 .header-right .signup-btn {
-  margin-left: 1rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.95rem;
-  font-weight: 500;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
+margin-left: 1rem;
+padding: 0.5rem 1rem;
+font-size: 0.95rem;
+font-weight: 500;
+border-radius: 6px;
+cursor: pointer;
+transition: all 0.2s ease;
+border: none;
 }
 
 /* Login button - outline style */
 .login-btn {
-  background-color: transparent;
-  color: #f9fafb;
-  border: 1px solid #4b5563;
+background-color: transparent;
+color: #f9fafb;
+border: 1px solid #4b5563;
 }
 
 .login-btn:hover {
-  background-color: #1f2937;
+background-color: #1f2937;
 }
 
 /* Signup button - primary style */
 .signup-btn {
-  background-color: #3b82f6;
-  color: #fff;
+background-color: #3b82f6;
+color: #fff;
 }
 
 .signup-btn:hover {
-  background-color: #2563eb;
+background-color: #2563eb;
 }
 
 .header-left {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
+display: flex;
+align-items: center;
+gap: 2rem;
 }
 .generating-status {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 300px; /* same or similar height to an image */
-  text-align: center;
-  font-size: 1rem;
-  color: #ccc;
-  font-style: italic;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 300px; /* same or similar height to an image */
+text-align: center;
+font-size: 1rem;
+color: #ccc;
+font-style: italic;
 }
 
 .header-nav a {
-  margin-right: 1rem;
-  font-size: 1rem;
-  color: #d1d5db;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
+margin-right: 1rem;
+font-size: 1rem;
+color: #d1d5db;
+text-decoration: none;
+font-weight: 500;
+transition: color 0.2s;
 }
 
 .header-nav a:hover {
-  color: #3b82f6;
+color: #3b82f6;
 }
 
 .header-right {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0; /* prevents it from shrinking too much */
-  min-width: 0; /* allow content to shrink if necessary */
+display: flex;
+align-items: center;
+gap: 0.5rem;
+flex-shrink: 0; /* prevents it from shrinking too much */
+min-width: 0; /* allow content to shrink if necessary */
 }
 /* Ensure auth area stays right aligned */
 .site-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1rem;
-  width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 0 1rem;
+width: 100%;
+box-sizing: border-box;
+overflow-x: hidden;
 }
 
 #auth-area {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  flex-shrink: 1;
-  flex-grow: 0;
-  min-width: 0;
-  overflow: hidden;
-  max-width: 100%;
+display: flex;
+align-items: center;
+justify-content: flex-end;
+gap: 0.5rem;
+flex-shrink: 1;
+flex-grow: 0;
+min-width: 0;
+overflow: hidden;
+max-width: 100%;
 }
 
 #user-menu {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  min-width: 0;
-  flex-shrink: 1;
+display: flex;
+align-items: center;
+white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
+min-width: 0;
+flex-shrink: 1;
 }
 
 #logout-btn {
-  white-space: nowrap;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.85rem;
-  flex-shrink: 0;
+white-space: nowrap;
+padding: 0.5rem 0.75rem;
+font-size: 0.85rem;
+flex-shrink: 0;
 }
 
 
 
 
 @media (max-width: 768px) {
-  .site-header {
-    padding: 0 0.5rem;
-  }
+.site-header {
+padding: 0 0.5rem;
+}
 
-  .header-left {
-    gap: 1rem;
-  }
+.header-left {
+gap: 1rem;
+}
 
-  .header-nav a {
-    margin-right: 0.5rem;
-    font-size: 0.9rem;
-  }
+.header-nav a {
+margin-right: 0.5rem;
+font-size: 0.9rem;
+}
 
-  #logout-btn {
-    font-size: 0.85rem;
-    padding: 0.25rem 0.5rem;
-  }
+#logout-btn {
+font-size: 0.85rem;
+padding: 0.25rem 0.5rem;
+}
 }
 .card-section,
 .card-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
+display: flex;
+flex-wrap: wrap;
+gap: 1rem;
+justify-content: center;
 }
 
 .prompt-card {
-  max-width: 300px;
-  width: 100%;
+max-width: 300px;
+width: 100%;
 }
 
 .prompt-card img {
-  width: 100%;
-  max-width: 300px;
-  height: auto;
-  object-fit: contain;
-  border-radius: 12px;
-  margin-bottom: 0.75rem;
+width: 100%;
+max-width: 300px;
+height: auto;
+object-fit: contain;
+border-radius: 12px;
+margin-bottom: 0.75rem;
 }
 
 .prompt-card:hover {
-  transform: scale(1.03);
+transform: scale(1.03);
 }
 @media (max-width: 768px) {
-  .prompt-card {
-    max-width: 100%;
-  }
+.prompt-card {
+max-width: 100%;
+}
 
-  .prompt-card img {
-    max-width: 100%;
-  }
+.prompt-card img {
+max-width: 100%;
+}
 }
 .tooltip-container {
-  position: relative;
+position: relative;
 }
 
 .tooltip-container::after {
-  content: "Click to copy prompt";
-  position: absolute;
-  top: 70%; /* Show below the card */
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 6px; /* space below the card */
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.85);
-  color: #fff;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-  z-index: 10;
+content: "Click to copy prompt";
+position: absolute;
+top: 70%; /* Show below the card */
+left: 50%;
+transform: translateX(-50%);
+margin-top: 6px; /* space below the card */
+left: 50%;
+transform: translateX(-50%);
+background: rgba(0, 0, 0, 0.85);
+color: #fff;
+padding: 4px 8px;
+border-radius: 6px;
+font-size: 0.75rem;
+white-space: nowrap;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.2s ease;
+z-index: 10;
 }
 
 .tooltip-container:hover::after {
-  opacity: 1;
+opacity: 1;
 }
 
 .prompt-text {
-  padding: 0.75rem;
-  font-size: 0.9rem;
-  color: #f0f0f0;
-  text-align: center;
-  user-select: none;
+padding: 0.75rem;
+font-size: 0.9rem;
+color: #f0f0f0;
+text-align: center;
+user-select: none;
 }
 
 .copied-toast {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  background: rgba(0, 200, 255, 0.7);
-  color: white;
-  font-size: 0.75rem;
-  padding: 0.2rem 0.5rem;
-  border-radius: 6px;
-  display: none;
+position: absolute;
+bottom: 8px;
+right: 8px;
+background: rgba(0, 200, 255, 0.7);
+color: white;
+font-size: 0.75rem;
+padding: 0.2rem 0.5rem;
+border-radius: 6px;
+display: none;
 }
 
 
 #user-menu span {
-  margin-right: 0.5rem;
+margin-right: 0.5rem;
 }
 .site-name-glass {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #fff;
-  text-decoration: none;
-  padding: 0.4rem 1rem;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(59, 130, 246, 0.1));
-  backdrop-filter: blur(12px) saturate(150%);
-  -webkit-backdrop-filter: blur(12px) saturate(150%);
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.2);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  transition: all 0.3s ease;
+font-family: 'Poppins', sans-serif;
+font-size: 1.8rem;
+font-weight: 700;
+color: #fff;
+text-decoration: none;
+padding: 0.4rem 1rem;
+border-radius: 12px;
+background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(59, 130, 246, 0.1));
+backdrop-filter: blur(12px) saturate(150%);
+-webkit-backdrop-filter: blur(12px) saturate(150%);
+box-shadow: 0 4px 16px rgba(59, 130, 246, 0.2);
+display: inline-flex;
+align-items: center;
+gap: 0.25rem;
+transition: all 0.3s ease;
 }
 
 .site-name-glass:hover {
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-  
+box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+
 }
 
 .site-name-glass .glow {
-  color: #3b82f6;
-  font-weight: 800;
-  text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
+color: #3b82f6;
+font-weight: 800;
+text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 }
 
 
-  </style>
+</style>
 </head>
 <body>
- <header class="site-header">
-  <div class="header-left">
-    <a href="/" class="site-name-glass">Anime<span class="glow">Factory</span></a>
+<header class="site-header">
+<div class="header-left">
+<a href="/" class="site-name-glass">Anime<span class="glow">Factory</span></a>
 
 
-   <nav class="header-nav">
-  <a href="/">Generate</a>
-  <a href="/membership">Membership</a>
+<nav class="header-nav">
+<a href="/">Generate</a>
+<a href="/membership">Membership</a>
 </nav>
 
 
-  </div>
+</div>
 
-  <div class="header-right" id="auth-area">
-    <div id="auth-buttons">
-      <button id="show-login" class="login-btn">Log In</button>
-      <button id="show-signup" class="signup-btn">Sign Up</button>
-    </div>
-    <div id="user-menu" class="hidden">
-      <span id="user-email"></span>
-      <button id="logout-btn" class="login-btn">Log Out</button>
-    </div>
-  </div>
+<div class="header-right" id="auth-area">
+<div id="auth-buttons">
+<button id="show-login" class="login-btn">Log In</button>
+<button id="show-signup" class="signup-btn">Sign Up</button>
+</div>
+<div id="user-menu" class="hidden">
+<span id="user-email"></span>
+<button id="logout-btn" class="login-btn">Log Out</button>
+</div>
+</div>
 </header>
-  <div id="auth-modal" class="hidden">
-  <div id="auth-modal-content">
-    <div id="auth-tabs">
-      <button id="tab-signup" class="active">Sign Up</button>
-      <button id="tab-login">Log In</button>
-    </div>
-    <input id="email" type="email" placeholder="Email" />
-    <input id="password" type="password" placeholder="Password" />
-    <button id="auth-submit">Submit</button>
-    <button id="auth-cancel" type="button">Cancel</button>
+<div id="auth-modal" class="hidden">
+<div id="auth-modal-content">
+<div id="auth-tabs">
+<button id="tab-signup" class="active">Sign Up</button>
+<button id="tab-login">Log In</button>
+</div>
+<input id="email" type="email" placeholder="Email" />
+<input id="password" type="password" placeholder="Password" />
+<button id="auth-submit">Submit</button>
+<button id="auth-cancel" type="button">Cancel</button>
 
-    <p id="modal-status"></p>
-  </div>
+<p id="modal-status"></p>
+</div>
 </div>
 
 
-  <form id="generate-form">
-  <textarea id="prompt-input" placeholder="Enter prompt..." rows="3"></textarea>
-  <button type="submit">✨ Generate</button>
+<form id="generate-form">
+<textarea id="prompt-input" placeholder="Enter prompt..." rows="3"></textarea>
+<button type="submit">✨ Generate</button>
 </form>
-  <div id="progress-container" class="hidden">
-    <div id="progress-bar"></div>
-  </div>
+<div id="progress-container" class="hidden">
+<div id="progress-bar"></div>
+</div>
 
-  <p id="status"></p>
-  <div id="image-feed"></div>
-  <div id="image-sections" style="margin-top: 2rem; width: 100%; max-width: 960px;">
-  <div id="user-images-section" class="card-section"></div>
-  <h2 style="margin-top: 2rem;">Try these examples</h2>
-  <div id="example-cards" class="card-grid"></div>
+<p id="status"></p>
+<div id="image-feed"></div>
+<div id="image-sections" style="margin-top: 2rem; width: 100%; max-width: 960px;">
+<div id="user-images-section" class="card-section"></div>
+<h2 style="margin-top: 2rem;">Try these examples</h2>
+<div id="example-cards" class="card-grid"></div>
 </div>
 
 <div id="modal" class="hidden">
 
 
-  <img id="modal-img" src="" style="max-width: 90%; max-height: 90%;" />
+<img id="modal-img" src="" style="max-width: 90%; max-height: 90%;" />
 </div>
-  <script type="module">
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    function escapeHtml(text) {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+
+<script type="module">
+
+function escapeHtml(text) {
+return text
+.replace(/&/g, "&amp;")
+.replace(/</g, "&lt;")
+.replace(/>/g, "&gt;")
+.replace(/"/g, "&quot;")
+.replace(/'/g, "&#039;");
 }
 
 const examplePrompts = [
-  {
-    prompt: "castle on a hill, lightning, nighttime, purple sky, moon, torch lit path leading up to the castle",
-    img: "/examples/castle.png"
-  },
-  {
-    prompt: "1girl, blue_hair, field landscape, summer outfit, standing in front of a wood windmill",
-    img: "/examples/windmill.png"
-  },
-  {
-    prompt: "river, sunny day, selfie from above, 1girl, green sweater, black shorts, wood dock, sunshine",
-    img: "/examples/selfie.png"
-  }
+{
+prompt: "castle on a hill, lightning, nighttime, purple sky, moon, torch lit path leading up to the castle",
+img: "/examples/castle.png"
+},
+{
+prompt: "1girl, blue_hair, field landscape, summer outfit, standing in front of a wood windmill",
+img: "/examples/windmill.png"
+},
+{
+prompt: "river, sunny day, selfie from above, 1girl, green sweater, black shorts, wood dock, sunshine",
+img: "/examples/selfie.png"
+}
 ];
- window.addEventListener("DOMContentLoaded", () => {
-  renderExampleCards();
-
-  onAuthStateChanged(auth, (user) => {
-    if (!user) return;
-
-    const pendingJobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
-
-    for (const job of pendingJobs) {
-      const placeholder = document.createElement("div");
-      placeholder.classList.add("prompt-card");
-      placeholder.innerHTML = `<div class="status-line">⏳ Resuming job...</div>`;
-      imageFeed.prepend(placeholder);
-
-      const completed = { count: 0 };
-      const statusTracker = { highestPriority: 0 };
-
-      pollJobStatus(
-        job.jobId,
-        0,
-        job.prompt,
-        (url) => {
-          placeholder.innerHTML = `
-            <img src="${url}" />
-            <div>
-              <small><b>Prompt:</b> ${escapeHtml(job.prompt)}</small><br>
-              <small>Generated just now</small>
-              <div class="card-buttons">
-                <button class="action-btn download-btn" data-url="${url}">Download</button>
-              </div>
-            </div>
-          `;
-        },
-        statusTracker,
-        placeholder
-      );
-    }
-  }); // ✅ Close onAuthStateChanged
-
-}); // ✅ Close window.addEventListener
-
-
+window.addEventListener("DOMContentLoaded", () => {
+renderExampleCards();
+});
 function renderExampleCards() {
-  const container = document.getElementById("example-cards");
-  examplePrompts.forEach(({ prompt, img }) => {
-    const card = document.createElement("div");
-    card.className = "prompt-card tooltip-container";
+const container = document.getElementById("example-cards");
+examplePrompts.forEach(({ prompt, img }) => {
+const card = document.createElement("div");
+card.className = "prompt-card tooltip-container";
 
-    const image = document.createElement("img");
-    image.src = img;
+const image = document.createElement("img");
+image.src = img;
 
-    const text = document.createElement("div");
-    text.className = "prompt-text";
-    text.textContent = prompt;
+const text = document.createElement("div");
+text.className = "prompt-text";
+text.textContent = prompt;
 
-    const toast = document.createElement("div");
-    toast.className = "copied-toast";
-    toast.textContent = "Copied!";
+const toast = document.createElement("div");
+toast.className = "copied-toast";
+toast.textContent = "Copied!";
 
-    card.appendChild(image);
-    card.appendChild(text);
-    card.appendChild(toast);
+card.appendChild(image);
+card.appendChild(text);
+card.appendChild(toast);
 
-    card.onclick = () => {
-      navigator.clipboard.writeText(prompt);
-      toast.style.display = "block";
-      setTimeout(() => (toast.style.display = "none"), 1000);
-    };
+card.onclick = () => {
+navigator.clipboard.writeText(prompt);
+toast.style.display = "block";
+setTimeout(() => (toast.style.display = "none"), 1000);
+};
 
-    container.appendChild(card);
-  });
+container.appendChild(card);
+});
 }
 
 
 
 
 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-   import {
-  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-  onAuthStateChanged, signOut,
-  setPersistence, browserLocalPersistence
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import {
+getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+onAuthStateChanged, signOut,
+setPersistence, browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-    import {
-  getFirestore, collection, doc, addDoc, getDocs, orderBy, query,
-  deleteDoc, serverTimestamp, getDoc, setDoc, updateDoc, increment
+import {
+getFirestore, collection, doc, addDoc, getDocs, orderBy, query,
+deleteDoc, serverTimestamp, getDoc, setDoc, updateDoc, increment
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-    import {
-  getStorage, ref, deleteObject, uploadBytes, getDownloadURL
+import {
+getStorage, ref, deleteObject, uploadBytes, getDownloadURL
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyB0lJ8jUO77xWV_aLtzbENNcoXWnPiBxbg",
-      authDomain: "ai-image-gen-157dc.firebaseapp.com",
-      projectId: "ai-image-gen-157dc",
-      storageBucket: "ai-image-gen-157dc.appspot.com",
-      messagingSenderId: "452258416221",
-      appId: "1:452258416221:web:de88966b659d26a4ebefb4"
-    };
+const firebaseConfig = {
+apiKey: "AIzaSyB0lJ8jUO77xWV_aLtzbENNcoXWnPiBxbg",
+authDomain: "ai-image-gen-157dc.firebaseapp.com",
+projectId: "ai-image-gen-157dc",
+storageBucket: "ai-image-gen-157dc.appspot.com",
+messagingSenderId: "452258416221",
+appId: "1:452258416221:web:de88966b659d26a4ebefb4"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 setPersistence(auth, browserLocalPersistence).catch((err) => {
-  console.error("Failed to set persistence:", err);
+console.error("Failed to set persistence:", err);
 });
 
-    const firestore = getFirestore(app);
-    const storage = getStorage(app, "gs://ai-image-gen-157dc.firebasestorage.app");
+const firestore = getFirestore(app);
+const storage = getStorage(app, "gs://ai-image-gen-157dc.firebasestorage.app");
 
-    const authButtons = document.getElementById("auth-buttons");
-    const userMenu = document.getElementById("user-menu");
-    const userEmail = document.getElementById("user-email");
-    const logoutBtn = document.getElementById("logout-btn");
-    const authModal = document.getElementById("auth-modal");
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const authSubmit = document.getElementById("auth-submit");
-    const authCancel = document.getElementById("auth-cancel");
-    const modalStatus = document.getElementById("modal-status");
-    const generateForm = document.getElementById("generate-form");
-    const imageFeed = document.getElementById("image-feed");
-    const statusP = document.getElementById("status");
-    const showSignupBtn = document.getElementById("show-signup");
-    const showLoginBtn = document.getElementById("show-login");
-    const progressContainer = document.getElementById("progress-container");
-    const progressBar = document.getElementById("progress-bar");
-    
-    let authAction = null;
-    
-    let currentCredits = 0; // will be updated after login
+const authButtons = document.getElementById("auth-buttons");
+const userMenu = document.getElementById("user-menu");
+const userEmail = document.getElementById("user-email");
+const logoutBtn = document.getElementById("logout-btn");
+const authModal = document.getElementById("auth-modal");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const authSubmit = document.getElementById("auth-submit");
+const authCancel = document.getElementById("auth-cancel");
+const modalStatus = document.getElementById("modal-status");
+const generateForm = document.getElementById("generate-form");
+const imageFeed = document.getElementById("image-feed");
+const statusP = document.getElementById("status");
+const showSignupBtn = document.getElementById("show-signup");
+const showLoginBtn = document.getElementById("show-login");
+const progressContainer = document.getElementById("progress-container");
+const progressBar = document.getElementById("progress-bar");
 
-    authCancel.onclick = () => {
-  authModal.classList.add("hidden");
-  emailInput.value = "";
-  passwordInput.value = "";
-  modalStatus.textContent = "";
+let authAction = null;
+
+let currentCredits = 0; // will be updated after login
+
+authCancel.onclick = () => {
+authModal.classList.add("hidden");
+emailInput.value = "";
+passwordInput.value = "";
+modalStatus.textContent = "";
 };
 
-   
 
 
 
-    authSubmit.onclick = async () => {
-  const email = emailInput.value.trim();
-  const password = passwordInput.value.trim();
-  
-  if (!authAction) {
-    modalStatus.textContent = "Please select Sign Up or Log In.";
-    return;
-  }
 
-  if (!email || !password) {
-    modalStatus.textContent = "Email and password required.";
-    return;
-  }
+authSubmit.onclick = async () => {
+const email = emailInput.value.trim();
+const password = passwordInput.value.trim();
 
-  try {
-    if (authAction === "signup") {
-      await createUserWithEmailAndPassword(auth, email, password);
-    } else {
-      await signInWithEmailAndPassword(auth, email, password);
-    }
-    console.log("Auth successful, hiding modal");
-    authModal.classList.add("hidden");  // ✅ This is your actual hide
-    emailInput.value = "";
-    passwordInput.value = "";
-    modalStatus.textContent = "";
-  } catch (e) {
-    modalStatus.textContent = e.message;
-  }
+if (!authAction) {
+modalStatus.textContent = "Please select Sign Up or Log In.";
+return;
+}
+
+if (!email || !password) {
+modalStatus.textContent = "Email and password required.";
+return;
+}
+
+try {
+if (authAction === "signup") {
+await createUserWithEmailAndPassword(auth, email, password);
+} else {
+await signInWithEmailAndPassword(auth, email, password);
+}
+console.log("Auth successful, hiding modal");
+authModal.classList.add("hidden");  // ✅ This is your actual hide
+emailInput.value = "";
+passwordInput.value = "";
+modalStatus.textContent = "";
+} catch (e) {
+modalStatus.textContent = e.message;
+}
 };
-    logoutBtn.onclick = async () => {
-      await signOut(auth);
-    };
+logoutBtn.onclick = async () => {
+await signOut(auth);
+};
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        authButtons.classList.add("hidden");
-        userMenu.classList.remove("hidden");
-        
-        const userRef = doc(firestore, "users", user.uid);
+onAuthStateChanged(auth, async (user) => {
+if (user) {
+authButtons.classList.add("hidden");
+userMenu.classList.remove("hidden");
+
+const userRef = doc(firestore, "users", user.uid);
 
 let userSnap = await getDoc(userRef);
 
 if (!userSnap.exists()) {
- await setDoc(userRef, {
-  credits: 0,
-  plan: "free",
-  lastRenewed: serverTimestamp(),
+await setDoc(userRef, {
+credits: 0,
+plan: "free",
+lastRenewed: serverTimestamp(),
 });
 
-  userSnap = await getDoc(userRef);
+userSnap = await getDoc(userRef);
 }
 const userData = userSnap.data();
 const lastRenewed = userData.lastRenewed?.toDate?.();
 const now = new Date();
 
 if (lastRenewed) {
-  const msSinceRenewal = now - lastRenewed;
-  const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+const msSinceRenewal = now - lastRenewed;
+const thirtyDays = 30 * 24 * 60 * 60 * 1000;
 
-  if (msSinceRenewal > thirtyDays) {
-    let newCredits = 0; // default for free
+if (msSinceRenewal > thirtyDays) {
+let newCredits = 0; // default for free
 
-    if (userData.plan === "basic") newCredits = 300;
-    if (userData.plan === "pro") newCredits = 600;
-    if (userData.plan === "premium") newCredits = 1000;
+if (userData.plan === "basic") newCredits = 300;
+if (userData.plan === "pro") newCredits = 600;
+if (userData.plan === "premium") newCredits = 1000;
 
-    await updateDoc(userRef, {
-      credits: newCredits,
-      lastRenewed: serverTimestamp(),
-    });
+await updateDoc(userRef, {
+credits: newCredits,
+lastRenewed: serverTimestamp(),
+});
 
-    currentCredits = newCredits;
-  } else {
-    currentCredits = userData.credits;
-  }
+currentCredits = newCredits;
 } else {
-  currentCredits = userData.credits;
+currentCredits = userData.credits;
+}
+} else {
+currentCredits = userData.credits;
 }
 
 
 userEmail.innerHTML = `
-  ${user.email}
-  <i class="fas fa-gem" style="color:#3b82f6; margin-left: 8px;"></i> ${currentCredits} credits
+ ${user.email}
+ <i class="fas fa-gem" style="color:#3b82f6; margin-left: 8px;"></i> ${currentCredits} credits
 `;
 
 
 
 
-        //generateForm.classList.remove("hidden");
-        await loadUserImages(user.uid);
-        const pendingJobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
+//generateForm.classList.remove("hidden");
+await loadUserImages(user.uid);
+const pendingJobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
 
 for (const job of pendingJobs) {
-  try {
-    const res = await fetch(`${BACKEND_URL}/api/job/${job.jobId}`);
+try {
+const res = await fetch(`${BACKEND_URL}/api/job/${job.jobId}`);
 
-    const data = await res.json();
-    const jobData = data.job;
+const data = await res.json();
+const jobData = data.job;
 
-    // ✅ ONLY continue if still pending
-    if (jobData?.status === "QUEUED" || jobData?.status === "RUNNING") {
-      const placeholder = document.createElement("div");
-      placeholder.classList.add("prompt-card");
-      placeholder.innerHTML = `<div class="status-line">⏳ Resuming job...</div>`;
-      imageFeed.prepend(placeholder);
+// ✅ ONLY continue if still pending
+if (jobData?.status === "QUEUED" || jobData?.status === "RUNNING") {
+const placeholder = document.createElement("div");
+placeholder.classList.add("prompt-card");
+placeholder.innerHTML = `<div class="status-line">⏳ Resuming job...</div>`;
+imageFeed.prepend(placeholder);
 
-      const completed = { count: 0 };
-      const statusTracker = { highestPriority: 0 };
+const completed = { count: 0 };
+const statusTracker = { highestPriority: 0 };
 
-      pollJobStatus(
-        job.jobId,
-        0,
-        job.prompt,
-        (url) => {
-          placeholder.innerHTML = `
-            <img src="${url}" />
-            <div>
-              <small><b>Prompt:</b> ${escapeHtml(job.prompt)}</small><br>
-              <small>Generated just now</small>
-              <div class="card-buttons">
-                <button class="action-btn download-btn" data-url="${url}">Download</button>
-              
-              </div>
-            </div>
-          `;
-         
-        },
-        statusTracker,
-        placeholder
-        
-      );
-    } else {
-      // ✅ Don't poll or show anything for completed/failed jobs
-      removeJob(job.jobId);
-    }
-  } catch (err) {
-    console.error("❌ Error checking job on refresh:", err);
-  }
+pollJobStatus(
+job.jobId,
+0,
+job.prompt,
+(url) => {
+placeholder.innerHTML = `
+           <img src="${url}" />
+           <div>
+             <small><b>Prompt:</b> ${escapeHtml(job.prompt)}</small><br>
+             <small>Generated just now</small>
+             <div class="card-buttons">
+               <button class="action-btn download-btn" data-url="${url}">Download</button>
+             
+             </div>
+           </div>
+         `;
+
+},
+statusTracker,
+placeholder
+
+);
+} else {
+// ✅ Don't poll or show anything for completed/failed jobs
+removeJob(job.jobId);
+}
+} catch (err) {
+console.error("❌ Error checking job on refresh:", err);
+}
 }
 
 
 
 
-      // Modal open: when an image is clicked
+// Modal open: when an image is clicked
 imageFeed.addEventListener("click", (e) => {
-  if (e.target.tagName === "IMG") {
-    modalImg.src = e.target.src;
-    modal.classList.remove("hidden");
-  }
+if (e.target.tagName === "IMG") {
+modalImg.src = e.target.src;
+modal.classList.remove("hidden");
+}
 });
 const modal = document.getElementById("modal");
 const modalImg = document.getElementById("modal-img");
 // Modal close: when anywhere on the modal is clicked
 modal.addEventListener("click", () => {
-  modal.classList.add("hidden");
+modal.classList.add("hidden");
 });
 
 
-      } else {
-        authButtons.classList.remove("hidden");
-        userMenu.classList.add("hidden");
-        //generateForm.classList.add("hidden");
-        imageFeed.innerHTML = "";
-      }
-    });
+} else {
+authButtons.classList.remove("hidden");
+userMenu.classList.add("hidden");
+//generateForm.classList.add("hidden");
+imageFeed.innerHTML = "";
+}
+});
 
-    function saveJob(jobId, prompt) {
-  const jobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
-  jobs.push({ jobId, prompt });
-  localStorage.setItem("pendingJobs", JSON.stringify(jobs));
+function saveJob(jobId, prompt) {
+const jobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
+jobs.push({ jobId, prompt });
+localStorage.setItem("pendingJobs", JSON.stringify(jobs));
 }
 
 function removeJob(jobId) {
-  const jobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
-  const updated = jobs.filter(j => j.jobId !== jobId);
-  localStorage.setItem("pendingJobs", JSON.stringify(updated));
+const jobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
+const updated = jobs.filter(j => j.jobId !== jobId);
+localStorage.setItem("pendingJobs", JSON.stringify(updated));
 }
 
 generateForm.onsubmit = async (e) => {
-  e.preventDefault();
-  const prompt = document.getElementById("prompt-input").value.trim();
+e.preventDefault();
+const prompt = document.getElementById("prompt-input").value.trim();
 
-  if (!auth.currentUser) {
-    authAction = "login";
-    authModal.classList.remove("hidden");
-    modalStatus.textContent = "Please log in to generate images.";
-    return;
-  }
+if (!auth.currentUser) {
+authAction = "login";
+authModal.classList.remove("hidden");
+modalStatus.textContent = "Please log in to generate images.";
+return;
+}
 
-  if (!prompt) {
-    statusP.textContent = "Enter a prompt.";
-    return;
-  }
+if (!prompt) {
+statusP.textContent = "Enter a prompt.";
+return;
+}
 
-  if (/[<>]/.test(prompt)) {
-    statusP.textContent = "❌ Prompt cannot contain < or > characters.";
-    return;
-  }
+if (/[<>]/.test(prompt)) {
+statusP.textContent = "❌ Prompt cannot contain < or > characters.";
+return;
+}
 
-  const userDoc = await getDoc(doc(firestore, "users", auth.currentUser.uid));
-  const userData = userDoc.data();
-  if (currentCredits < 2) {
-    statusP.textContent = "❌ You need at least 2 credits to generate 2 images.";
-    return;
-  }
+const userDoc = await getDoc(doc(firestore, "users", auth.currentUser.uid));
+const userData = userDoc.data();
+if (currentCredits < 2) {
+statusP.textContent = "❌ You need at least 2 credits to generate 2 images.";
+return;
+}
 
-  await updateDoc(doc(firestore, "users", auth.currentUser.uid), {
-    credits: increment(-2),
-  });
-  currentCredits -= 2;
-  userEmail.textContent = `${auth.currentUser.email} (${currentCredits} credits)`;
+await updateDoc(doc(firestore, "users", auth.currentUser.uid), {
+credits: increment(-2),
+});
+currentCredits -= 2;
+userEmail.textContent = `${auth.currentUser.email} (${currentCredits} credits)`;
 
-  progressContainer.classList.remove("hidden");
-  progressBar.style.width = "0%";
-  //statusP.textContent = "Submitting 2 jobs...";
+progressContainer.classList.remove("hidden");
+progressBar.style.width = "0%";
+//statusP.textContent = "Submitting 2 jobs...";
 
-  const idToken = await auth.currentUser.getIdToken();
+const idToken = await auth.currentUser.getIdToken();
 
-  try {
-    const [res1, res2] = await Promise.all([
-      fetch(`${BACKEND_URL}/api/generate`, {
+try {
+const [res1, res2] = await Promise.all([
+fetch(`${BACKEND_URL}/api/generate`, {
 
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
-        body: JSON.stringify({ prompt }),
-      }),
-      fetch(`${BACKEND_URL}/api/generate`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+Authorization: `Bearer ${idToken}`,
+},
+body: JSON.stringify({ prompt }),
+}),
+fetch(`${BACKEND_URL}/api/generate`, {
 
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
-        body: JSON.stringify({ prompt }),
-      }),
-    ]);
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+Authorization: `Bearer ${idToken}`,
+},
+body: JSON.stringify({ prompt }),
+}),
+]);
 
-    const data1 = await res1.json();
-    const data2 = await res2.json();
+const data1 = await res1.json();
+const data2 = await res2.json();
 
-    if (!res1.ok || !res2.ok) throw new Error("One of the jobs failed to submit.");
+if (!res1.ok || !res2.ok) throw new Error("One of the jobs failed to submit.");
 
-    saveJob(data1.jobId, prompt);
-    saveJob(data2.jobId, prompt);
+saveJob(data1.jobId, prompt);
+saveJob(data2.jobId, prompt);
 
-    const completed = { count: 0 };
-    const statusTracker = { highestPriority: 0 };
+const completed = { count: 0 };
+const statusTracker = { highestPriority: 0 };
 
-    const onComplete = async (imageUrl, placeholderDiv) => {
-      placeholderDiv.innerHTML = `
-        <img src="${imageUrl}" />
-        <div>
-          <small><b>Prompt:</b> ${escapeHtml(prompt)}</small><br>
-          <small>Generated just now (expires in ~1h)</small>
-          <div class="card-buttons">
-            <button class="action-btn download-btn" data-url="${imageUrl}">Download</button>
-           
-          </div>
-        </div>
-      `;
-     
+const onComplete = async (imageUrl, placeholderDiv) => {
+placeholderDiv.innerHTML = `
+       <img src="${imageUrl}" />
+       <div>
+         <small><b>Prompt:</b> ${escapeHtml(prompt)}</small><br>
+         <small>Generated just now (expires in ~1h)</small>
+         <div class="card-buttons">
+           <button class="action-btn download-btn" data-url="${imageUrl}">Download</button>
+          
+         </div>
+       </div>
+     `;
 
-      completed.count++;
-      if (completed.count === 2) {
-        mostRecentJobStatus = "";
-        statusP.textContent = "";
-        progressContainer.classList.add("hidden");
-      }
-    };
 
-    const placeholder1 = document.createElement("div");
-    placeholder1.classList.add("prompt-card");
-    placeholder1.innerHTML = `
-    <div class="prompt-text">🛠️ Generating image 1...</div>
-  <div class="status-line">⏳ In queue – waiting to start...</div>
+completed.count++;
+if (completed.count === 2) {
+mostRecentJobStatus = "";
+statusP.textContent = "";
+progressContainer.classList.add("hidden");
+}
+};
+
+const placeholder1 = document.createElement("div");
+placeholder1.classList.add("prompt-card");
+placeholder1.innerHTML = `
+   <div class="prompt-text">🛠️ Generating image 1...</div>
+ <div class="status-line">⏳ In queue – waiting to start...</div>
 `;
 
 imageFeed.prepend(placeholder1);
-    const placeholder2 = document.createElement("div");
-    placeholder2.classList.add("prompt-card");
-    placeholder2.innerHTML = `
-  <div class="prompt-text">🛠️ Generating image 2...</div>
-  <div class="status-line">⏳ In queue – waiting to start...</div>
+const placeholder2 = document.createElement("div");
+placeholder2.classList.add("prompt-card");
+placeholder2.innerHTML = `
+ <div class="prompt-text">🛠️ Generating image 2...</div>
+ <div class="status-line">⏳ In queue – waiting to start...</div>
 `;
 imageFeed.prepend(placeholder2);
-    pollJobStatus(data1.jobId, 0, prompt, (url) => onComplete(url, placeholder1), statusTracker, placeholder1);
+pollJobStatus(data1.jobId, 0, prompt, (url) => onComplete(url, placeholder1), statusTracker, placeholder1);
 pollJobStatus(data2.jobId, 0, prompt, (url) => onComplete(url, placeholder2), statusTracker, placeholder2);
 
 
-  } catch (err) {
-    statusP.textContent = "Error: " + err.message;
-    progressContainer.classList.add("hidden");
-  }
+} catch (err) {
+statusP.textContent = "Error: " + err.message;
+progressContainer.classList.add("hidden");
+}
 };
 
 
@@ -1359,163 +1321,163 @@ let mostRecentJobStatus = "";
 
 
 function dataURLtoBlob(dataUrl) {
-  const arr = dataUrl.split(',');
-  const mime = arr[0].match(/:(.*?);/)[1];
-  const bstr = atob(arr[1]);
-  let n = bstr.length;
-  const u8arr = new Uint8Array(n);
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
-  }
-  return new Blob([u8arr], { type: mime });
+const arr = dataUrl.split(',');
+const mime = arr[0].match(/:(.*?);/)[1];
+const bstr = atob(arr[1]);
+let n = bstr.length;
+const u8arr = new Uint8Array(n);
+while (n--) {
+u8arr[n] = bstr.charCodeAt(n);
+}
+return new Blob([u8arr], { type: mime });
 }
 
 async function pollJobStatus(jobId, attempt = 0, prompt = "", onComplete = null, statusTracker = { highestPriority: 0 }, placeholderDiv = null) {
-  const MAX_ATTEMPTS = 500;
-  const POLL_INTERVAL = 3000;
-  const userId = auth.currentUser.uid;
-  const userDoc = await getDoc(doc(firestore, "users", userId));
-  const userPlan = userDoc.data().plan || 'free';
+const MAX_ATTEMPTS = 500;
+const POLL_INTERVAL = 3000;
+const userId = auth.currentUser.uid;
+const userDoc = await getDoc(doc(firestore, "users", userId));
+const userPlan = userDoc.data().plan || 'free';
 
-  let secondsElapsed = 0;
-  const interval = setInterval(() => {
-    secondsElapsed++;
-    const minutes = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
-    const secondsStr = String(secondsElapsed % 60).padStart(2, '0');
-    const formattedTime = `${minutes}:${secondsStr}`;
-    if (placeholderDiv) {
-      const statusEl = placeholderDiv.querySelector(".status-line");
-      if (statusEl) {
-        const liveStatus = placeholderDiv.dataset.jobStatusText || "⏳ Working...";
-        statusEl.textContent = `${liveStatus} • ${formattedTime}`;
-      }
-    }
+let secondsElapsed = 0;
+const interval = setInterval(() => {
+secondsElapsed++;
+const minutes = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+const secondsStr = String(secondsElapsed % 60).padStart(2, '0');
+const formattedTime = `${minutes}:${secondsStr}`;
+if (placeholderDiv) {
+const statusEl = placeholderDiv.querySelector(".status-line");
+if (statusEl) {
+const liveStatus = placeholderDiv.dataset.jobStatusText || "⏳ Working...";
+statusEl.textContent = `${liveStatus} • ${formattedTime}`;
+}
+}
 
-    if (secondsElapsed === 90) {
-      statusP.textContent = "Server is experiencing high demand. Try submitting another generation to speed up the queue."
-    }
-  }, 1000);
+if (secondsElapsed === 90) {
+statusP.textContent = "Server is experiencing high demand. Try submitting another generation to speed up the queue."
+}
+}, 1000);
 
-  async function poll(attempt) {
-    if (attempt >= MAX_ATTEMPTS) {
-      clearInterval(interval);
-      progressContainer.classList.add("hidden");
-      statusP.textContent = "❌ Job timed out. Please try again.";
-      return;
-    }
+async function poll(attempt) {
+if (attempt >= MAX_ATTEMPTS) {
+clearInterval(interval);
+progressContainer.classList.add("hidden");
+statusP.textContent = "❌ Job timed out. Please try again.";
+return;
+}
 
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/job/${jobId}`);
-      const data = await res.json();
-      const job = data.job;
+try {
+const res = await fetch(`${BACKEND_URL}/api/job/${jobId}`);
+const data = await res.json();
+const job = data.job;
 
-      console.log("🎯 Job status:", job?.status, job);
+console.log("🎯 Job status:", job?.status, job);
 
-      progressBar.style.width = `${Math.min(((attempt + 1) / MAX_ATTEMPTS) * 100, 100)}%`;
+progressBar.style.width = `${Math.min(((attempt + 1) / MAX_ATTEMPTS) * 100, 100)}%`;
 
-      const status = job?.status || "UNKNOWN";
-      const statusMap = {
-        QUEUED: "⏳ In queue – waiting to start...",
-        RUNNING: "🔄 Generating – image in progress...",
-        SUCCESS: "✅ Success!",
-        FAILED: "❌ Generation failed.",
-      };
-      if (placeholderDiv) placeholderDiv.dataset.jobStatusText = statusMap[status] || "⏳ Working...";
+const status = job?.status || "UNKNOWN";
+const statusMap = {
+QUEUED: "⏳ In queue – waiting to start...",
+RUNNING: "🔄 Generating – image in progress...",
+SUCCESS: "✅ Success!",
+FAILED: "❌ Generation failed.",
+};
+if (placeholderDiv) placeholderDiv.dataset.jobStatusText = statusMap[status] || "⏳ Working...";
 
-      if (status === "SUCCESS") {
-        clearInterval(interval);
-        removeJob(jobId);
-        let imageUrl = job.successInfo?.images?.[0]?.url;
-        let finalUrl = imageUrl;
-        let storagePathSaved = null;
+if (status === "SUCCESS") {
+clearInterval(interval);
+removeJob(jobId);
+let imageUrl = job.successInfo?.images?.[0]?.url;
+let finalUrl = imageUrl;
+let storagePathSaved = null;
 
-        if (userPlan === "free" || userPlan === "basic") {
-          try {
-            finalUrl = await addWatermark(imageUrl);
-            const blob = dataURLtoBlob(finalUrl); // ✅ FIX: convert canvas output to Blob
-            const storagePath = `users/${userId}/${jobId}.png`;
-            const imageRef = ref(storage, storagePath);
-            await uploadBytes(imageRef, blob);
-            finalUrl = await getDownloadURL(imageRef);
-            storagePathSaved = storagePath;
-            console.log("✅ Uploaded watermarked image:", finalUrl);
-          } catch (err) {
-            console.warn("❌ Watermarking/upload failed, using original:", err);
-            finalUrl = imageUrl;
-          }
-        }
+if (userPlan === "free" || userPlan === "basic") {
+try {
+finalUrl = await addWatermark(imageUrl);
+const blob = dataURLtoBlob(finalUrl); // ✅ FIX: convert canvas output to Blob
+const storagePath = `users/${userId}/${jobId}.png`;
+const imageRef = ref(storage, storagePath);
+await uploadBytes(imageRef, blob);
+finalUrl = await getDownloadURL(imageRef);
+storagePathSaved = storagePath;
+console.log("✅ Uploaded watermarked image:", finalUrl);
+} catch (err) {
+console.warn("❌ Watermarking/upload failed, using original:", err);
+finalUrl = imageUrl;
+}
+}
 
-        await addDoc(collection(firestore, "users", userId, "images"), {
-          url: finalUrl,
-          prompt,
-          path: storagePathSaved,
-          createdAt: serverTimestamp(),
-        });
+await addDoc(collection(firestore, "users", userId, "images"), {
+url: finalUrl,
+prompt,
+path: storagePathSaved,
+createdAt: serverTimestamp(),
+});
 
-        if (onComplete) onComplete(finalUrl, placeholderDiv);
-      } else if (status === "FAILED") {
-        clearInterval(interval);
-        removeJob(jobId);
-        progressContainer.classList.add("hidden");
-        statusP.textContent = "❌ Generation failed.";
-      } else {
-        setTimeout(() => poll(attempt + 1), POLL_INTERVAL);
-      }
+if (onComplete) onComplete(finalUrl, placeholderDiv);
+} else if (status === "FAILED") {
+clearInterval(interval);
+removeJob(jobId);
+progressContainer.classList.add("hidden");
+statusP.textContent = "❌ Generation failed.";
+} else {
+setTimeout(() => poll(attempt + 1), POLL_INTERVAL);
+}
 
-    } catch (err) {
-      clearInterval(interval);
-      console.error("❌ Polling error:", err);
-      statusP.textContent = `❌ Polling error: ${err.message}`;
-      progressContainer.classList.add("hidden");
-    }
-  }
+} catch (err) {
+clearInterval(interval);
+console.error("❌ Polling error:", err);
+statusP.textContent = `❌ Polling error: ${err.message}`;
+progressContainer.classList.add("hidden");
+}
+}
 
-  poll(attempt);
+poll(attempt);
 }
 
 
 
 
 async function addWatermark(imageUrl) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = `https://cors-proxy.animefactory-proxy.workers.dev/?url=${encodeURIComponent(imageUrl)}`;
+return new Promise((resolve, reject) => {
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = `https://cors-proxy.animefactory-proxy.workers.dev/?url=${encodeURIComponent(imageUrl)}`;
 
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext("2d");
+img.onload = () => {
+const canvas = document.createElement("canvas");
+canvas.width = img.width;
+canvas.height = img.height;
+const ctx = canvas.getContext("2d");
 
-      // Draw the image
-      ctx.drawImage(img, 0, 0);
+// Draw the image
+ctx.drawImage(img, 0, 0);
 
-      // Watermark settings
-      const fontSize = Math.floor(canvas.width * 0.035);
-      ctx.font = `bold ${fontSize}px Poppins`;
-      ctx.textAlign = "right";
-      ctx.textBaseline = "bottom";
+// Watermark settings
+const fontSize = Math.floor(canvas.width * 0.035);
+ctx.font = `bold ${fontSize}px Poppins`;
+ctx.textAlign = "right";
+ctx.textBaseline = "bottom";
 
-      const padding = canvas.width * 0.02;
-      const text = "AnimeFactory.art";
+const padding = canvas.width * 0.02;
+const text = "AnimeFactory.art";
 
-      // Stroke (black outline)
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = "rgba(0, 0, 0, 0.8)";
-      ctx.strokeText(text, canvas.width - padding, canvas.height - padding);
+// Stroke (black outline)
+ctx.lineWidth = 4;
+ctx.strokeStyle = "rgba(0, 0, 0, 0.8)";
+ctx.strokeText(text, canvas.width - padding, canvas.height - padding);
 
-      // Fill (white text)
-      ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
-      ctx.fillText(text, canvas.width - padding, canvas.height - padding);
+// Fill (white text)
+ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
+ctx.fillText(text, canvas.width - padding, canvas.height - padding);
 
-      resolve(canvas.toDataURL("image/png"));
-    };
+resolve(canvas.toDataURL("image/png"));
+};
 
-    img.onerror = () => {
-      reject(new Error("Image failed to load (likely expired or CORS-restricted)"));
-    };
-  });
+img.onerror = () => {
+reject(new Error("Image failed to load (likely expired or CORS-restricted)"));
+};
+});
 }
 
 
@@ -1525,144 +1487,145 @@ const tabSignup = document.getElementById("tab-signup");
 const tabLogin = document.getElementById("tab-login");
 
 tabSignup.onclick = () => {
-  authAction = "signup";
-  tabSignup.classList.add("active");
-  tabLogin.classList.remove("active");
-  modalStatus.textContent = "";
+authAction = "signup";
+tabSignup.classList.add("active");
+tabLogin.classList.remove("active");
+modalStatus.textContent = "";
 };
 
 tabLogin.onclick = () => {
-  authAction = "login";
-  tabLogin.classList.add("active");
-  tabSignup.classList.remove("active");
-  modalStatus.textContent = "";
+authAction = "login";
+tabLogin.classList.add("active");
+tabSignup.classList.remove("active");
+modalStatus.textContent = "";
 };
 
 showSignupBtn.onclick = () => {
-  authAction = "signup";
-  tabSignup.classList.add("active");
-  tabLogin.classList.remove("active");
-  authModal.classList.remove("hidden");
-  modalStatus.textContent = "";
+authAction = "signup";
+tabSignup.classList.add("active");
+tabLogin.classList.remove("active");
+authModal.classList.remove("hidden");
+modalStatus.textContent = "";
 };
 
 showLoginBtn.onclick = () => {
-  authAction = "login";
-  tabLogin.classList.add("active");
-  tabSignup.classList.remove("active");
-  authModal.classList.remove("hidden");
-  modalStatus.textContent = "";
+authAction = "login";
+tabLogin.classList.add("active");
+tabSignup.classList.remove("active");
+authModal.classList.remove("hidden");
+modalStatus.textContent = "";
 };
-    async function loadUserImages(userId) {
-  const q = query(
-    collection(firestore, "users", userId, "images"),
-    orderBy("createdAt", "desc")
-  );
-  const querySnapshot = await getDocs(q);
+async function loadUserImages(userId) {
+const q = query(
+collection(firestore, "users", userId, "images"),
+orderBy("createdAt", "desc")
+);
+const querySnapshot = await getDocs(q);
 
-  imageFeed.innerHTML = `<p class="status-line">🔄 Loading your images...</p>`;
+imageFeed.innerHTML = `<p class="status-line">🔄 Loading your images...</p>`;
 
-  for (const docSnap of querySnapshot.docs) {
-    const data = docSnap.data();
-    const imageUrl = data.url;
+for (const docSnap of querySnapshot.docs) {
+const data = docSnap.data();
+const imageUrl = data.url;
 
-    const div = document.createElement("div");
-    div.classList.add("prompt-card");
-    div.innerHTML = `
-      <img src="${imageUrl}" />
-      <div>
-        <small><b>Prompt:</b> ${escapeHtml(data.prompt)}</small><br>
-        <div class="card-buttons">
-          <button class="action-btn download-btn" data-url="${imageUrl}">Download</button>
-          
-        </div>
-      </div>
-    `;
+const div = document.createElement("div");
+div.classList.add("prompt-card");
+div.innerHTML = `
+     <img src="${imageUrl}" />
+     <div>
+       <small><b>Prompt:</b> ${escapeHtml(data.prompt)}</small><br>
+       <div class="card-buttons">
+         <button class="action-btn download-btn" data-url="${imageUrl}">Download</button>
+         
+       </div>
+     </div>
+   `;
 
-  
-    imageFeed.appendChild(div);
-  }
 
-  imageFeed.querySelector(".status-line")?.remove();
+imageFeed.appendChild(div);
+}
+
+imageFeed.querySelector(".status-line")?.remove();
 }
 
 
 
 
-  imageFeed.addEventListener("click", async (e) => {
-  if (e.target.classList.contains("download-btn")) {
-    const url = e.target.getAttribute("data-url");
+imageFeed.addEventListener("click", async (e) => {
+if (e.target.classList.contains("download-btn")) {
+const url = e.target.getAttribute("data-url");
 
-    try {
-      // If it's already a data URL (from canvas watermark), download directly
-      if (url.startsWith("data:image")) {
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "image.png";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        return;
-      }
+try {
+// If it's already a data URL (from canvas watermark), download directly
+if (url.startsWith("data:image")) {
+const a = document.createElement("a");
+a.href = url;
+a.download = "image.png";
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+return;
+}
 
-      // Otherwise, fetch as blob (for normal external URLs)
-      const response = await fetch(url, { mode: "cors" });
-      const blob = await response.blob();
+// Otherwise, fetch as blob (for normal external URLs)
+const response = await fetch(url, { mode: "cors" });
+const blob = await response.blob();
 
-      const blobUrl = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = blobUrl;
-      a.download = "image.png";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(blobUrl);
-    } catch (err) {
-      console.error("Download failed:", err);
-      alert("❌ Could not download image.");
-    }
-  }
+const blobUrl = URL.createObjectURL(blob);
+const a = document.createElement("a");
+a.href = blobUrl;
+a.download = "image.png";
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+URL.revokeObjectURL(blobUrl);
+} catch (err) {
+console.error("Download failed:", err);
+alert("❌ Could not download image.");
+}
+}
 });
 
 
 // Open the modal with the clicked image
 imageFeed.addEventListener("click", (e) => {
-  if (e.target.tagName === "IMG") {
-    modalImg.src = e.target.src;
-    modal.classList.remove("hidden");
-  }
+if (e.target.tagName === "IMG") {
+modalImg.src = e.target.src;
+modal.classList.remove("hidden");
+}
 });
 // Close the modal when clicked
 modal.onclick = () => modal.classList.add("hidden");
-   
-   
 
-  
- const BACKEND_URL = "https://animefactory-backend.onrender.com";
 
-  async function testAPI() {
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/job/test`);
-      const text = await res.text();
-      console.log("✅ RESPONSE TEXT:", text);
-    } catch (e) {
-      console.error("❌ TEST ERROR:", e);
-    }
-  }
+
+
+const BACKEND_URL = "https://animefactory-backend.onrender.com";
+
+async function testAPI() {
+try {
+const res = await fetch(`${BACKEND_URL}/api/job/test`);
+const text = await res.text();
+console.log("✅ RESPONSE TEXT:", text);
+} catch (e) {
+console.error("❌ TEST ERROR:", e);
+}
+}
 
   
 
 </script>
 <div style="text-align: center; margin: 40px 0;">
+  
 
 </div>
 
 <footer class="site-footer">
-  <a href="/terms.html">Terms of Service</a>
-  <span class="divider">|</span>
-  <a href="/privacy.html">Privacy Policy</a>
-  <span class="divider">|</span>
-  <a href="mailto:animefactory.art@gmail.com">Contact: animefactory.art@gmail.com</a>
+<a href="/terms.html">Terms of Service</a>
+<span class="divider">|</span>
+<a href="/privacy.html">Privacy Policy</a>
+<span class="divider">|</span>
+<a href="mailto:animefactory.art@gmail.com">Contact: animefactory.art@gmail.com</a>
 </footer>
 
 
