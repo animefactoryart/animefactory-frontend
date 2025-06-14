@@ -870,11 +870,7 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 </div>
 
 <p id="status"></p>
-<div id="image-feed-wrapper">
-  <div id="pending-jobs-feed"></div>
-  <div id="image-feed"></div>
-</div>
-
+<div id="image-feed"></div>
 <div id="image-sections" style="margin-top: 2rem; width: 100%; max-width: 960px;">
 <div id="user-images-section" class="card-section"></div>
 <h2 style="margin-top: 2rem;">Try these examples</h2>
@@ -882,108 +878,54 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 </div>
 
 <div id="modal" class="hidden">
-<!-- Make sure this is inside a valid HTML structure -->
+
+
 <img id="modal-img" src="" style="max-width: 90%; max-height: 90%;" />
+</div>
 
 <script type="module">
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { auth } from "/static/firebase-init.js"; // Ensure this points to your correct Firebase init module
 
-  function escapeHtml(text) {
-    return text
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
+function escapeHtml(text) {
+return text
+.replace(/&/g, "&amp;")
+.replace(/</g, "&lt;")
+.replace(/>/g, "&gt;")
+.replace(/"/g, "&quot;")
+.replace(/'/g, "&#039;");
+}
 
-  const examplePrompts = [
-    {
-      prompt: "castle on a hill, lightning, nighttime, purple sky, moon, torch lit path leading up to the castle",
-      img: "/examples/castle.png"
-    },
-    {
-      prompt: "1girl, blue_hair, field landscape, summer outfit, standing in front of a wood windmill",
-      img: "/examples/windmill.png"
-    },
-    {
-      prompt: "river, sunny day, selfie from above, 1girl, green sweater, black shorts, wood dock, sunshine",
-      img: "/examples/selfie.png"
-    }
-  ];
+const examplePrompts = [
+{
+prompt: "castle on a hill, lightning, nighttime, purple sky, moon, torch lit path leading up to the castle",
+img: "/examples/castle.png"
+},
+{
+prompt: "1girl, blue_hair, field landscape, summer outfit, standing in front of a wood windmill",
+img: "/examples/windmill.png"
+},
+{
+prompt: "river, sunny day, selfie from above, 1girl, green sweater, black shorts, wood dock, sunshine",
+img: "/examples/selfie.png"
+}
+];
+window.addEventListener("DOMContentLoaded", () => {
+renderExampleCards();
+});
+function renderExampleCards() {
+const container = document.getElementById("example-cards");
+examplePrompts.forEach(({ prompt, img }) => {
+const card = document.createElement("div");
+card.className = "prompt-card tooltip-container";
 
-  window.addEventListener("DOMContentLoaded", () => {
-    renderExampleCards();
+const image = document.createElement("img");
+image.src = img;
 
-    onAuthStateChanged(auth, (user) => {
-      if (!user) return;
-      const pendingJobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
+const text = document.createElement("div");
+text.className = "prompt-text";
+text.textContent = prompt;
 
-      for (const job of pendingJobs) {
-        const placeholder = document.createElement("div");
-        placeholder.classList.add("prompt-card");
-        placeholder.innerHTML = `<div class="status-line">⏳ Resuming job...</div>`;
-        imageFeed.prepend(placeholder);
-
-        const completed = { count: 0 };
-        const statusTracker = { highestPriority: 0 };
-
-        pollJobStatus(
-          job.jobId,
-          0,
-          job.prompt,
-          (url) => {
-            placeholder.innerHTML = `
-              <img src="${url}" />
-              <div>
-                <small><b>Prompt:</b> ${escapeHtml(job.prompt)}</small><br>
-                <small>Generated just now</small>
-                <div class="card-buttons">
-                  <button class="action-btn download-btn" data-url="${url}">Download</button>
-                </div>
-              </div>
-            `;
-          },
-          statusTracker,
-          placeholder
-        );
-      }
-    });
-  });
-
-  function renderExampleCards() {
-    const container = document.getElementById("example-cards");
-    examplePrompts.forEach(({ prompt, img }) => {
-      const card = document.createElement("div");
-      card.className = "prompt-card tooltip-container";
-
-      const image = document.createElement("img");
-      image.src = img;
-
-      const text = document.createElement("div");
-      text.className = "prompt-text";
-      text.textContent = prompt;
-
-      const toast = document.createElement("div");
-      toast.className = "copied-toast";
-      toast.textContent = "Copied!";
-
-      card.appendChild(image);
-      card.appendChild(text);
-      card.appendChild(toast);
-
-      card.onclick = () => {
-        navigator.clipboard.writeText(prompt);
-        toast.style.display = "block";
-        setTimeout(() => (toast.style.display = "none"), 1000);
-      };
-
-      container.appendChild(card);
-    });
-  }
-</script>
-pied-toast";
+const toast = document.createElement("div");
+toast.className = "copied-toast";
 toast.textContent = "Copied!";
 
 card.appendChild(image);
@@ -1177,8 +1119,7 @@ if (jobData?.status === "QUEUED" || jobData?.status === "RUNNING") {
 const placeholder = document.createElement("div");
 placeholder.classList.add("prompt-card");
 placeholder.innerHTML = `<div class="status-line">⏳ Resuming job...</div>`;
-document.getElementById("pending-jobs-feed").prepend(placeholder);
-
+imageFeed.prepend(placeholder);
 
 const completed = { count: 0 };
 const statusTracker = { highestPriority: 0 };
