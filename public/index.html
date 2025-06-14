@@ -836,6 +836,22 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 .mobile-menu.show {
   display: flex;
 }
+@media (max-width: 768px) {
+  #auth-buttons button {
+    display: none;
+  }
+
+  #auth-buttons::after {
+    content: "Sign up";
+    background: #3b82f6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+}
 
 
 
@@ -1656,31 +1672,11 @@ console.error("❌ TEST ERROR:", e);
 }
 }
 
-  const menuToggle = document.getElementById("menu-toggle");
-const mobileNav = document.getElementById("mobile-nav");
-
-menuToggle.addEventListener("click", () => {
-  mobileNav.classList.toggle("show");
-
-});
-
-// Auto-close on link click
-document.querySelectorAll("#mobile-nav a").forEach(link => {
-  link.addEventListener("click", () => {
-    mobileNav.classList.remove("show");
-    
-  });
-});
-
-document.querySelectorAll("#mobile-nav a").forEach(link => {
-  link.addEventListener("click", () => {
-    document.getElementById("mobile-nav").classList.remove("show");
-  });
-});
-const toggle = document.getElementById('menu-toggle');
+  const toggle = document.getElementById('menu-toggle');
 const nav = document.getElementById('mobile-nav');
 
-toggle.addEventListener('click', () => {
+toggle.addEventListener('click', (e) => {
+  e.stopPropagation(); // prevent closing immediately
   nav.classList.toggle('show');
 });
 
@@ -1688,6 +1684,12 @@ document.addEventListener('click', function (e) {
   if (!nav.contains(e.target) && !toggle.contains(e.target)) {
     nav.classList.remove('show');
   }
+});
+
+document.querySelectorAll("#mobile-nav a").forEach(link => {
+  link.addEventListener("click", () => {
+    nav.classList.remove("show");
+  });
 });
 
 </script>
