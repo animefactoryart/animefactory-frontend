@@ -1446,7 +1446,6 @@ localStorage.setItem("pendingJobs", JSON.stringify(updated));
 
 generateForm.onsubmit = async (e) => {
 e.preventDefault();
-statusP.textContent = "✨ Submitting generation...";
 
 const prompt = document.getElementById("prompt-input").value.trim();
 
@@ -1466,6 +1465,7 @@ if (/[<>]/.test(prompt)) {
 statusP.textContent = "❌ Prompt cannot contain < or > characters.";
 return;
 }
+statusP.textContent = "✨ Submitting generation...";
 
 const userDoc = await getDoc(doc(firestore, "users", auth.currentUser.uid));
 const userData = userDoc.data();
