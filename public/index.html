@@ -853,6 +853,46 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
   }
 }
 
+@media (max-width: 768px) {
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    height: auto;
+    padding: 0.5rem 1rem;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+  }
+
+  .header-right {
+    margin-top: 0.5rem;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  #auth-buttons .login-btn,
+  #auth-buttons .signup-btn {
+    display: none;
+  }
+
+  #mobile-login-button {
+    display: block;
+    background-color: #3b82f6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    border: none;
+    font-size: 0.95rem;
+  }
+}
 
 
 </style>
@@ -1675,46 +1715,34 @@ console.error("❌ TEST ERROR:", e);
 document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('menu-toggle');
   const nav = document.getElementById('mobile-nav');
-  const authButtons = document.getElementById('auth-buttons');
-  const showLoginBtn = document.getElementById('show-login');
-  const showSignupBtn = document.getElementById('show-signup');
-  const authModal = document.getElementById('auth-modal');
-  const tabLogin = document.getElementById('tab-login');
-  const tabSignup = document.getElementById('tab-signup');
-  const modalStatus = document.getElementById('modal-status');
+  const mobileLogin = document.getElementById('mobile-login-button');
 
-  // ☰ Toggle menu
-  toggle.addEventListener('click', (e) => {
+  toggle?.addEventListener('click', (e) => {
     e.stopPropagation();
-    nav.classList.toggle('show');
+    nav?.classList.toggle('show');
   });
 
-  // Close menu on outside click
-  document.addEventListener('click', function (e) {
+  document.addEventListener('click', (e) => {
     if (!nav.contains(e.target) && !toggle.contains(e.target)) {
       nav.classList.remove('show');
     }
   });
 
-  // Close menu on link click
-  document.querySelectorAll("#mobile-nav a").forEach(link => {
-    link.addEventListener("click", () => {
-      nav.classList.remove("show");
+  document.querySelectorAll('#mobile-nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('show');
     });
   });
 
-  // 👇 Handle combined 'Account' click
-  authButtons.addEventListener('click', () => {
-    if (window.innerWidth <= 768) {
-      // Default to login tab
-      authAction = "login";
-      tabLogin.classList.add("active");
-      tabSignup.classList.remove("active");
-      authModal.classList.remove("hidden");
-      modalStatus.textContent = "";
-    }
+  mobileLogin?.addEventListener('click', () => {
+    authAction = 'login';
+    document.getElementById('tab-login').classList.add('active');
+    document.getElementById('tab-signup').classList.remove('active');
+    document.getElementById('auth-modal').classList.remove('hidden');
+    document.getElementById('modal-status').textContent = '';
   });
 });
+
 
 
 </script>
