@@ -1652,6 +1652,10 @@ if (placeholderDiv) placeholderDiv.dataset.jobStatusText = statusMap[status] || 
 if (status === "SUCCESS") {
 clearInterval(interval);
 removeJob(jobId);
+if (placeholderDiv) {
+  placeholderDiv.dataset.jobStatusText = "✅ Image generated – loading preview...";
+}
+
 let imageUrl = job.successInfo?.images?.[0]?.url;
 let finalUrl = imageUrl;
 let storagePathSaved = null;
