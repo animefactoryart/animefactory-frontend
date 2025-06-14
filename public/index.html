@@ -1049,143 +1049,137 @@ await signOut(auth);
 };
 
 onAuthStateChanged(auth, async (user) => {
-if (user) {
-authButtons.classList.add("hidden");
-userMenu.classList.remove("hidden");
+  if (user) {
+    authButtons.classList.add("hidden");
+    userMenu.classList.remove("hidden");
 
-const userRef = doc(firestore, "users", user.uid);
+    const userRef = doc(firestore, "users", user.uid);
+    let userSnap = await getDoc(userRef);
 
-let userSnap = await getDoc(userRef);
+    if (!userSnap.exists()) {
+      await setDoc(userRef, {
+        credits: 0,
+        plan: "free",
+        lastRenewed: serverTimestamp(),
+      });
+      userSnap = await getDoc(userRef);
+    }
 
-if (!userSnap.exists()) {
-await setDoc(userRef, {
-credits: 0,
-plan: "free",
-lastRenewed: serverTimestamp(),
+    const userData = userSnap.data();
+    const lastRenewed = userData.lastRenewed?.toDate?.();
+    const now = new Date();
+
+    if (lastRenewed) {
+      const msSinceRenewal = now - lastRenewed;
+      const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+
+      if (msSinceRenewal > thirtyDays) {
+        let newCredits = 0;
+        if (userData.plan === "basic") newCredits = 300;
+        if (userData.plan === "pro") newCredits = 600;
+        if (userData.plan === "premium") newCredits = 1000;
+
+        await updateDoc(userRef, {
+          credits: newCredits,
+          lastRenewed: serverTimestamp(),
+        });
+        currentCredits = newCredits;
+      } else {
+        currentCredits = userData.credits;
+      }
+    } else {
+      currentCredits = userData.credits;
+    }
+
+    userEmail.innerHTML = `
+      ${user.email}
+      <i class="fas fa-gem" style="color:#3b82f6; margin-left: 8px;"></i> ${currentCredits} credits
+    `;
+
+    await loadUserImages(user.uid);
+
+    const pendingJobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
+    const placeholderMap = {};
+
+    // 🧱 Create placeholders for all jobs
+    for (const job of pendingJobs) {
+      const placeholder = document.createElement("div");
+      placeholder.classList.add("prompt-card");
+      placeholder.dataset.placeholderId = job.placeholderId || job.jobId;
+      placeholder.innerHTML = `
+        <div class="prompt-text">🛠️ Resuming job...</div>
+        <div class="status-line">⏳ Checking status...</div>
+      `;
+      imageFeed.prepend(placeholder);
+      placeholderMap[job.jobId] = placeholder;
+    }
+
+    // 🔄 Resume polling
+    for (const job of pendingJobs) {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/job/${job.jobId}`);
+        const data = await res.json();
+        const jobData = data.job;
+
+        if (jobData?.status === "QUEUED" || jobData?.status === "RUNNING") {
+          const placeholder = placeholderMap[job.jobId];
+          const completed = { count: 0 };
+          const statusTracker = { highestPriority: 0 };
+
+          pollJobStatus(
+            job.jobId,
+            0,
+            job.prompt,
+            (url) => {
+              placeholder.innerHTML = `
+                <img src="${url}" />
+                <div>
+                  <small><b>Prompt:</b> ${escapeHtml(job.prompt)}</small><br>
+                  <small>Generated just now</small>
+                  <div class="card-buttons">
+                    <button class="action-btn download-btn" data-url="${url}">Download</button>
+                  </div>
+                </div>
+              `;
+            },
+            statusTracker,
+            placeholder
+          );
+        } else {
+          removeJob(job.jobId);
+        }
+      } catch (err) {
+        console.error("❌ Error checking job on refresh:", err);
+      }
+    }
+
+    // 🖼 Modal logic
+    imageFeed.addEventListener("click", (e) => {
+      if (e.target.tagName === "IMG") {
+        modalImg.src = e.target.src;
+        modal.classList.remove("hidden");
+      }
+    });
+
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modal-img");
+    modal.addEventListener("click", () => {
+      modal.classList.add("hidden");
+    });
+  } else {
+    authButtons.classList.remove("hidden");
+    userMenu.classList.add("hidden");
+    imageFeed.innerHTML = "";
+  }
 });
 
-userSnap = await getDoc(userRef);
-}
-const userData = userSnap.data();
-const lastRenewed = userData.lastRenewed?.toDate?.();
-const now = new Date();
-
-if (lastRenewed) {
-const msSinceRenewal = now - lastRenewed;
-const thirtyDays = 30 * 24 * 60 * 60 * 1000;
-
-if (msSinceRenewal > thirtyDays) {
-let newCredits = 0; // default for free
-
-if (userData.plan === "basic") newCredits = 300;
-if (userData.plan === "pro") newCredits = 600;
-if (userData.plan === "premium") newCredits = 1000;
-
-await updateDoc(userRef, {
-credits: newCredits,
-lastRenewed: serverTimestamp(),
-});
-
-currentCredits = newCredits;
-} else {
-currentCredits = userData.credits;
-}
-} else {
-currentCredits = userData.credits;
-}
-
-
-userEmail.innerHTML = `
- ${user.email}
- <i class="fas fa-gem" style="color:#3b82f6; margin-left: 8px;"></i> ${currentCredits} credits
-`;
-
-
-
-
-//generateForm.classList.remove("hidden");
-await loadUserImages(user.uid);
-const pendingJobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
-
-for (const job of pendingJobs) {
-try {
-const res = await fetch(`${BACKEND_URL}/api/job/${job.jobId}`);
-
-const data = await res.json();
-const jobData = data.job;
-
-// ✅ ONLY continue if still pending
-if (jobData?.status === "QUEUED" || jobData?.status === "RUNNING") {
-const placeholder = document.createElement("div");
-placeholder.classList.add("prompt-card");
-placeholder.innerHTML = `<div class="status-line">⏳ Resuming job...</div>`;
-imageFeed.prepend(placeholder);
-
-const completed = { count: 0 };
-const statusTracker = { highestPriority: 0 };
-
-pollJobStatus(
-job.jobId,
-0,
-job.prompt,
-(url) => {
-placeholder.innerHTML = `
-           <img src="${url}" />
-           <div>
-             <small><b>Prompt:</b> ${escapeHtml(job.prompt)}</small><br>
-             <small>Generated just now</small>
-             <div class="card-buttons">
-               <button class="action-btn download-btn" data-url="${url}">Download</button>
-             
-             </div>
-           </div>
-         `;
-
-},
-statusTracker,
-placeholder
-
-);
-} else {
-// ✅ Don't poll or show anything for completed/failed jobs
-removeJob(job.jobId);
-}
-} catch (err) {
-console.error("❌ Error checking job on refresh:", err);
-}
-}
-
-
-
-
-// Modal open: when an image is clicked
-imageFeed.addEventListener("click", (e) => {
-if (e.target.tagName === "IMG") {
-modalImg.src = e.target.src;
-modal.classList.remove("hidden");
-}
-});
-const modal = document.getElementById("modal");
-const modalImg = document.getElementById("modal-img");
-// Modal close: when anywhere on the modal is clicked
-modal.addEventListener("click", () => {
-modal.classList.add("hidden");
-});
-
-
-} else {
-authButtons.classList.remove("hidden");
-userMenu.classList.add("hidden");
-//generateForm.classList.add("hidden");
-imageFeed.innerHTML = "";
-}
-});
 
 function saveJob(jobId, prompt) {
-const jobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
-jobs.push({ jobId, prompt });
-localStorage.setItem("pendingJobs", JSON.stringify(jobs));
+  const jobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
+  jobs.push({ jobId, prompt, placeholderId: crypto.randomUUID?.() || jobId });
+  localStorage.setItem("pendingJobs", JSON.stringify(jobs));
 }
+
 
 function removeJob(jobId) {
 const jobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
