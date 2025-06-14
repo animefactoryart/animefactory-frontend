@@ -841,16 +841,7 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
     display: none;
   }
 
-  #auth-buttons::after {
-    content: "";
-    background: #3b82f6;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-weight: bold;
-    font-size: 0.95rem;
-    cursor: pointer;
-  }
+  
 }
 
 @media (max-width: 768px) {
@@ -893,6 +884,34 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
     font-size: 0.95rem;
   }
 }
+.hamburger {
+  z-index: 1001;
+  position: relative;
+}
+@media (max-width: 768px) {
+  #auth-buttons .login-btn,
+  #auth-buttons .signup-btn {
+    display: none;
+  }
+
+  #mobile-login-button {
+    display: block;
+    background: #3b82f6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+@media (min-width: 769px) {
+  #mobile-login-button {
+    display: none;
+  }
+}
 
 
 </style>
@@ -918,13 +937,14 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 
   <div class="header-right" id="auth-area">
     <div id="auth-buttons">
-      <!-- Desktop Buttons -->
-      <button id="show-login" class="login-btn">Log In</button>
-      <button id="show-signup" class="signup-btn">Sign Up</button>
+  <!-- Desktop buttons -->
+  <button id="show-login" class="login-btn">Log In</button>
+  <button id="show-signup" class="signup-btn">Sign Up</button>
 
-      <!-- Mobile-Only Button -->
-      <button id="mobile-login-button" class="signup-btn">Log In</button>
-    </div>
+  <!-- Mobile-only button -->
+  <button id="mobile-login-button" class="signup-btn">Log In</button>
+</div>
+
 
     <div id="user-menu" class="hidden">
       <span id="user-email"></span>
