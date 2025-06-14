@@ -1179,11 +1179,18 @@ modal.classList.add("hidden");
 
 
 } else {
-authButtons.classList.remove("hidden");
-userMenu.classList.add("hidden");
-//generateForm.classList.add("hidden");
-imageFeed.innerHTML = "";
+  authButtons.classList.remove("hidden");
+  userMenu.classList.add("hidden");
+  // generateForm.classList.add("hidden");
+
+  // Only remove authenticated user content, not pending job placeholders
+  const generatedCards = imageFeed.querySelectorAll(".prompt-card img");
+  generatedCards.forEach(img => {
+    const card = img.closest(".prompt-card");
+    card?.remove();
+  });
 }
+
 });
 
 function saveJob(jobId, prompt) {
