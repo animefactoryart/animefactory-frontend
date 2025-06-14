@@ -933,7 +933,6 @@ async function resumePendingJobs() {
         placeholder.classList.add("prompt-card");
         placeholder.innerHTML = `<div class="status-line">⏳ Resuming job...</div>`;
         imageFeed.prepend(placeholder);
-
         const statusTracker = { highestPriority: 0 };
         pollJobStatus(
           job.jobId,
