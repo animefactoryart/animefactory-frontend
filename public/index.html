@@ -889,8 +889,15 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
   position: relative;
 }
 @media (max-width: 768px) {
-  #auth-buttons .login-btn,
+  .header-nav {
+    display: none;
+  }
+
   #auth-buttons .signup-btn {
+    display: none;
+  }
+
+  #auth-buttons .login-btn {
     display: none;
   }
 
@@ -905,7 +912,20 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
     border: none;
     cursor: pointer;
   }
+
+  .mobile-menu a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .mobile-menu a:not(:last-child) {
+    border-bottom: 1px solid #2d3748;
+  }
 }
+
 
 @media (min-width: 769px) {
   #mobile-login-button {
@@ -929,11 +949,11 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
     <a href="/membership">Membership</a>
   </nav>
 
-  <!-- Mobile Menu Drawer -->
-  <nav class="mobile-menu" id="mobile-nav">
-    <a href="/">Generate</a>
-    <a href="/membership">Membership</a>
-  </nav>
+ <!-- Mobile Menu Drawer -->
+<nav class="mobile-menu" id="mobile-nav">
+  <a href="/membership">Membership</a>
+</nav>
+
 
   <div class="header-right" id="auth-area">
     <div id="auth-buttons">
