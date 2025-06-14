@@ -862,6 +862,50 @@ color: #3b82f6;
 font-weight: 800;
 text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 }
+.hamburger {
+  display: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: white;
+  padding: 0.25rem;
+}
+
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  background-color: #111827;
+  padding: 1rem;
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  border-bottom: 1px solid #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.mobile-menu a {
+  color: white;
+  font-size: 1rem;
+  text-decoration: none;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Show menu on small screens */
+@media (max-width: 768px) {
+  .header-nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .mobile-menu.show {
+    display: flex;
+  }
+}
 
 
 </style>
@@ -872,9 +916,13 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 <a href="/" class="site-name-glass">Anime<span class="glow">Factory</span></a>
 
 
-<nav class="header-nav">
-<a href="/">Generate</a>
-<a href="/membership">Membership</a>
+<!-- Hamburger icon (visible on mobile only) -->
+<div class="hamburger" id="menu-toggle">☰</div>
+
+<!-- Hidden menu (toggle this on mobile) -->
+<nav class="mobile-menu hidden" id="mobile-nav">
+  <a href="/">Generate</a>
+  <a href="/membership">Membership</a>
 </nav>
 
 
@@ -1677,7 +1725,15 @@ console.error("❌ TEST ERROR:", e);
 }
 }
 
-  
+  document.getElementById("menu-toggle").addEventListener("click", () => {
+    const nav = document.getElementById("mobile-nav");
+    nav.classList.toggle("show");
+  });
+document.querySelectorAll("#mobile-nav a").forEach(link => {
+  link.addEventListener("click", () => {
+    document.getElementById("mobile-nav").classList.remove("show");
+  });
+});
 
 </script>
 <div style="text-align: center; margin: 40px 0;">
