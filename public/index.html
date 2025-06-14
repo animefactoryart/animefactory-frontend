@@ -1530,7 +1530,8 @@ async function loadUserImages(userId) {
   // ✅ Do not wipe the feed — just add a loading line
   const loadingMsg = document.createElement("p");
   loadingMsg.className = "status-line";
-  loadingMsg.textContent = "🔄 Loading your images...";
+  loadingMsg.id = "resuming-status"; // ✅ Give it a unique ID
+  loadingMsg.textContent = "🔄 Resuming generation...";
   imageFeed.appendChild(loadingMsg);
 
   for (const docSnap of querySnapshot.docs) {
@@ -1554,6 +1555,10 @@ async function loadUserImages(userId) {
 
   // ✅ Remove loading text only
   imageFeed.querySelector(".status-line")?.remove();
+  // Remove the loading message if it exists
+const msg = document.getElementById("resuming-status");
+if (msg) msg.remove();
+
 }
 
 
