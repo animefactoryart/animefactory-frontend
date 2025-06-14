@@ -910,11 +910,12 @@ img: "/examples/selfie.png"
 ];
 window.addEventListener("DOMContentLoaded", () => {
 renderExampleCards();
-resumePendingJobs();
+
 });
 async function resumePendingJobs() {
-  const pendingJobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
+  if (!auth.currentUser) return; // ❗ Required: user must be logged in
 
+  const pendingJobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
   for (const job of pendingJobs) {
     try {
       const res = await fetch(`${BACKEND_URL}/api/job/${job.jobId}`);
@@ -957,6 +958,7 @@ async function resumePendingJobs() {
     }
   }
 }
+
 
 function renderExampleCards() {
 const container = document.getElementById("example-cards");
@@ -1103,6 +1105,8 @@ userMenu.classList.remove("hidden");
 const userRef = doc(firestore, "users", user.uid);
 
 let userSnap = await getDoc(userRef);
+ // 🔁 Call resumePendingJobs only after user is known
+    await resumePendingJobs();  // 👈 Moved here
 
 if (!userSnap.exists()) {
 await setDoc(userRef, {
