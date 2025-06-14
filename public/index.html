@@ -1608,32 +1608,29 @@ let imageUrl = job.successInfo?.images?.[0]?.url;
 let finalUrl = imageUrl;
 let storagePathSaved = null;
 
-
 try {
+  const storagePath = `users/${userId}/${jobId}.png`;
+  const imageRef = ref(storage, storagePath);
+
   if (userPlan === "free" || userPlan === "basic") {
-    // Add watermark
+    // Watermark + upload
     finalUrl = await addWatermark(imageUrl);
     const blob = dataURLtoBlob(finalUrl);
-    const storagePath = `users/${userId}/${jobId}.png`;
-    const imageRef = ref(storage, storagePath);
     await uploadBytes(imageRef, blob);
     finalUrl = await getDownloadURL(imageRef);
     storagePathSaved = storagePath;
     console.log("✅ Uploaded watermarked image:", finalUrl);
   } else {
-    // Upload premium image directly
-    const response = await fetch(imageUrl);
-    const blob = await response.blob();
-    const storagePath = `users/${userId}/${jobId}.png`;
-    const imageRef = ref(storage, storagePath);
+    // Just re-encode + upload
+    const blob = await reencodeImageToBlob(imageUrl);
     await uploadBytes(imageRef, blob);
     finalUrl = await getDownloadURL(imageRef);
     storagePathSaved = storagePath;
-    console.log("✅ Uploaded premium image:", finalUrl);
+    console.log("✅ Uploaded premium image (no watermark):", finalUrl);
   }
 } catch (err) {
-  console.warn("❌ Upload failed, using fallback image URL:", err);
-  finalUrl = imageUrl; // fallback if upload fails
+  console.warn("❌ Image upload failed:", err.message);
+  finalUrl = imageUrl; // fallback to original CDN URL
 }
 
 
@@ -1666,6 +1663,27 @@ poll(attempt);
 }
 
 
+async function reencodeImageToBlob(imageUrl) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = `https://cors-proxy.animefactory-proxy.workers.dev/?url=${encodeURIComponent(imageUrl)}`;
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      canvas.toBlob(blob => {
+        if (blob) resolve(blob);
+        else reject(new Error("Canvas toBlob failed"));
+      }, "image/png");
+    };
+
+    img.onerror = () => reject(new Error("Image failed to load (reencoding)"));
+  });
+}
 
 
 async function addWatermark(imageUrl) {
