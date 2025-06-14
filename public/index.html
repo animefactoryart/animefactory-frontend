@@ -1273,6 +1273,26 @@ appId: "1:452258416221:web:de88966b659d26a4ebefb4"
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+import { applyActionCode } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+async function handleEmailVerificationRedirect() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const mode = urlParams.get("mode");
+  const oobCode = urlParams.get("oobCode");
+
+  if (mode === "verifyEmail" && oobCode) {
+    try {
+      await applyActionCode(auth, oobCode);
+      console.log("✅ Email verified successfully!");
+      window.history.replaceState({}, document.title, "/"); // Clean URL
+      alert("✅ Your email has been verified!");
+      await auth.currentUser.reload(); // update status
+    } catch (error) {
+      console.error("❌ Failed to apply verification code:", error.message);
+      alert("❌ Verification link is invalid or expired.");
+    }
+  }
+}
 
 setPersistence(auth, browserLocalPersistence).catch((err) => {
 console.error("Failed to set persistence:", err);
@@ -1932,7 +1952,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-
+handleEmailVerificationRedirect();
 
 
 
