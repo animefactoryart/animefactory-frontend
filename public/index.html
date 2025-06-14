@@ -287,7 +287,7 @@ backdrop-filter: blur(8px);
 
 /* Sparkle/shine animation */
 #generate-form button[type="submit"]::after {
-content: "";
+content: "Login";
 position: absolute;
 top: -50%;
 left: -50%;
@@ -842,7 +842,7 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
   }
 
   #auth-buttons::after {
-    content: "Account";
+    content: "";
     background: #3b82f6;
     color: white;
     padding: 0.5rem 1rem;
@@ -1672,25 +1672,50 @@ console.error("❌ TEST ERROR:", e);
 }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('menu-toggle');
-const nav = document.getElementById('mobile-nav');
+  const nav = document.getElementById('mobile-nav');
+  const authButtons = document.getElementById('auth-buttons');
+  const showLoginBtn = document.getElementById('show-login');
+  const showSignupBtn = document.getElementById('show-signup');
+  const authModal = document.getElementById('auth-modal');
+  const tabLogin = document.getElementById('tab-login');
+  const tabSignup = document.getElementById('tab-signup');
+  const modalStatus = document.getElementById('modal-status');
 
-toggle.addEventListener('click', (e) => {
-  e.stopPropagation(); // prevent closing immediately
-  nav.classList.toggle('show');
-});
+  // ☰ Toggle menu
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    nav.classList.toggle('show');
+  });
 
-document.addEventListener('click', function (e) {
-  if (!nav.contains(e.target) && !toggle.contains(e.target)) {
-    nav.classList.remove('show');
-  }
-});
+  // Close menu on outside click
+  document.addEventListener('click', function (e) {
+    if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+      nav.classList.remove('show');
+    }
+  });
 
-document.querySelectorAll("#mobile-nav a").forEach(link => {
-  link.addEventListener("click", () => {
-    nav.classList.remove("show");
+  // Close menu on link click
+  document.querySelectorAll("#mobile-nav a").forEach(link => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("show");
+    });
+  });
+
+  // 👇 Handle combined 'Account' click
+  authButtons.addEventListener('click', () => {
+    if (window.innerWidth <= 768) {
+      // Default to login tab
+      authAction = "login";
+      tabLogin.classList.add("active");
+      tabSignup.classList.remove("active");
+      authModal.classList.remove("hidden");
+      modalStatus.textContent = "";
+    }
   });
 });
+
 
 </script>
 <div style="text-align: center; margin: 40px 0;">
