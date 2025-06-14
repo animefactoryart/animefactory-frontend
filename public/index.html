@@ -23,6 +23,8 @@ z-index: 1;
 }
 
 
+
+
 #image-feed {
 display: flex;
 flex-wrap: wrap;
@@ -870,6 +872,7 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 </div>
 
 <p id="status"></p>
+<p id="status-message" class="status-line"></p>
 <div id="image-feed"></div>
 <div id="image-sections" style="margin-top: 2rem; width: 100%; max-width: 960px;">
 <div id="user-images-section" class="card-section"></div>
@@ -893,6 +896,7 @@ return text
 .replace(/"/g, "&quot;")
 .replace(/'/g, "&#039;");
 }
+const statusMessage = document.getElementById("status-message");
 
 const examplePrompts = [
 {
@@ -1200,6 +1204,8 @@ localStorage.setItem("pendingJobs", JSON.stringify(updated));
 
 generateForm.onsubmit = async (e) => {
 e.preventDefault();
+statusP.textContent = "✨ Submitting generation...";
+
 const prompt = document.getElementById("prompt-input").value.trim();
 
 if (!auth.currentUser) {
@@ -1308,8 +1314,10 @@ placeholder2.innerHTML = `
  <div class="status-line">⏳ In queue – waiting to start...</div>
 `;
 imageFeed.prepend(placeholder2);
+statusP.textContent = ""; // ✅ Clear submission message
 pollJobStatus(data1.jobId, 0, prompt, (url) => onComplete(url, placeholder1), statusTracker, placeholder1);
 pollJobStatus(data2.jobId, 0, prompt, (url) => onComplete(url, placeholder2), statusTracker, placeholder2);
+
 
 
 } catch (err) {
