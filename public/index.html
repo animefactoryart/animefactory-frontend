@@ -927,7 +927,8 @@ async function resumePendingJobs() {
       const data = JSON.parse(text);
       const jobData = data.job;
 
-      if (jobData?.status === "QUEUED" || jobData?.status === "RUNNING") {
+     if (["WAITING", "QUEUED", "RUNNING"].includes(jobData?.status)){
+
         const placeholder = document.createElement("div");
         placeholder.classList.add("prompt-card");
         placeholder.innerHTML = `<div class="status-line">⏳ Resuming job...</div>`;
