@@ -913,18 +913,14 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 }
 
 .mobile-menu {
-  display: none;
+  display: flex;
   flex-direction: column;
-  background-color: #111827;
-  padding: 1rem;
-  position: absolute;
-  top: 64px;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  border-bottom: 1px solid #333;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
+
 
 .mobile-menu a {
   color: white;
@@ -944,9 +940,12 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
     display: block;
   }
 
-  .mobile-menu.show {
-    display: flex;
-  }
+ .mobile-menu.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
 }
 
 
@@ -1777,14 +1776,14 @@ const mobileNav = document.getElementById("mobile-nav");
 
 menuToggle.addEventListener("click", () => {
   mobileNav.classList.toggle("show");
-  mobileNav.classList.toggle("hidden");
+
 });
 
 // Auto-close on link click
 document.querySelectorAll("#mobile-nav a").forEach(link => {
   link.addEventListener("click", () => {
     mobileNav.classList.remove("show");
-    mobileNav.classList.add("hidden");
+    
   });
 });
 
