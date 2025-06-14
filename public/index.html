@@ -1452,10 +1452,12 @@ generateForm.onsubmit = async (e) => {
 e.preventDefault();
 
 const prompt = document.getElementById("prompt-input").value.trim();
+await auth.currentUser.reload();
 if (!auth.currentUser.emailVerified) {
   statusP.textContent = "❌ Please verify your email before generating images.";
   return;
 }
+
 
 if (!auth.currentUser) {
 authAction = "login";
