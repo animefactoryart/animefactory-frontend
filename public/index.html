@@ -1833,35 +1833,18 @@ console.error("❌ TEST ERROR:", e);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  
-  const nav = document.getElementById('mobile-nav');
   const mobileLogin = document.getElementById('mobile-login-button');
-
-  toggle?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    nav?.classList.toggle('show');
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!nav.contains(e.target) && !toggle.contains(e.target)) {
-      nav.classList.remove('show');
-    }
-  });
-
-  document.querySelectorAll('#mobile-nav a').forEach(link => {
-    link.addEventListener('click', () => {
-      nav.classList.remove('show');
+  if (mobileLogin) {
+    mobileLogin.addEventListener('click', () => {
+      authAction = 'login';
+      document.getElementById('tab-login').classList.add('active');
+      document.getElementById('tab-signup').classList.remove('active');
+      document.getElementById('auth-modal').classList.remove('hidden');
+      document.getElementById('modal-status').textContent = '';
     });
-  });
-
-  mobileLogin?.addEventListener('click', () => {
-    authAction = 'login';
-    document.getElementById('tab-login').classList.add('active');
-    document.getElementById('tab-signup').classList.remove('active');
-    document.getElementById('auth-modal').classList.remove('hidden');
-    document.getElementById('modal-status').textContent = '';
-  });
+  }
 });
+
 
 
 
