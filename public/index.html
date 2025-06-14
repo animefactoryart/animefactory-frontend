@@ -1138,7 +1138,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const userSnap = await getDoc(userRef);
         if (!userSnap.exists()) {
           await setDoc(userRef, {
-            credits: 0,
+            credits: 10,
             plan: "free",
             lastRenewed: serverTimestamp(),
           });
@@ -1248,7 +1248,8 @@ getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
 onAuthStateChanged, signOut,
 setPersistence, browserLocalPersistence,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
 import {
@@ -1329,8 +1330,11 @@ return;
 
 try {
 if (authAction === "signup") {
-await createUserWithEmailAndPassword(auth, email, password);
-} else {
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  await sendEmailVerification(userCredential.user);
+  modalStatus.textContent = "✅ Verification email sent. Please check your inbox.";
+}
+ else {
 await signInWithEmailAndPassword(auth, email, password);
 }
 console.log("Auth successful, hiding modal");
@@ -1358,7 +1362,7 @@ onAuthStateChanged(auth, async (user) => {
     // Create user doc if it doesn't exist
     if (!userSnap.exists()) {
       await setDoc(userRef, {
-        credits: 0,
+        credits: 10,
         plan: "free",
         lastRenewed: serverTimestamp(),
       });
@@ -1448,6 +1452,10 @@ generateForm.onsubmit = async (e) => {
 e.preventDefault();
 
 const prompt = document.getElementById("prompt-input").value.trim();
+if (!auth.currentUser.emailVerified) {
+  statusP.textContent = "❌ Please verify your email before generating images.";
+  return;
+}
 
 if (!auth.currentUser) {
 authAction = "login";
