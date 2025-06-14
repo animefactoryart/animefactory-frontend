@@ -602,20 +602,6 @@ input:focus {
 .signup-btn:hover {
   background-color: #2563eb;
 }
-.delete-btn {
-  background: linear-gradient(135deg, #f87171, #ef4444);
-}
-
-.delete-btn:hover {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
-}
-.delete-btn {
-  background: linear-gradient(135deg, #f87171, #ef4444);
-}
-
-.delete-btn:hover {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
-}
 
 .header-left {
   display: flex;
@@ -1150,12 +1136,11 @@ for (const job of pendingJobs) {
               <small>Generated just now</small>
               <div class="card-buttons">
                 <button class="action-btn download-btn" data-url="${url}">Download</button>
-                <button class="action-btn delete-btn">Delete</button>
+              
               </div>
             </div>
           `;
-          placeholder.querySelector(".delete-btn").onclick = () =>
-            deleteImage(auth.currentUser.uid, null, null);
+         
         },
         statusTracker,
         placeholder
@@ -1289,12 +1274,11 @@ generateForm.onsubmit = async (e) => {
           <small>Generated just now (expires in ~1h)</small>
           <div class="card-buttons">
             <button class="action-btn download-btn" data-url="${imageUrl}">Download</button>
-            <button class="action-btn delete-btn">Delete</button>
+           
           </div>
         </div>
       `;
-      placeholderDiv.querySelector(".delete-btn").onclick = () =>
-        deleteImage(auth.currentUser.uid, null, null);
+     
 
       completed.count++;
       if (completed.count === 2) {
@@ -1552,14 +1536,12 @@ showLoginBtn.onclick = () => {
         <small><b>Prompt:</b> ${escapeHtml(data.prompt)}</small><br>
         <div class="card-buttons">
           <button class="action-btn download-btn" data-url="${imageUrl}">Download</button>
-          <button class="action-btn delete-btn">Delete</button>
+          
         </div>
       </div>
     `;
 
-    div.querySelector(".delete-btn").onclick = () =>
-      deleteImage(userId, docSnap.id, data.path || null);
-
+  
     imageFeed.appendChild(div);
   }
 
@@ -1614,16 +1596,7 @@ imageFeed.addEventListener("click", (e) => {
 });
 // Close the modal when clicked
 modal.onclick = () => modal.classList.add("hidden");
-    async function deleteImage(userId, docId, storagePath) {
-      try {
-        if (docId) await deleteDoc(doc(firestore, "users", userId, "images", docId));
-        if (storagePath) await deleteObject(ref(storage, storagePath));
-        await loadUserImages(userId);
-      } catch (err) {
-        console.error(err);
-        statusP.textContent = "❌ Failed to delete image.";
-      }
-    }
+   
    
 
   
