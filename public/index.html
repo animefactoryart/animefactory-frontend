@@ -910,7 +910,54 @@ img: "/examples/selfie.png"
 ];
 window.addEventListener("DOMContentLoaded", () => {
 renderExampleCards();
+resumePendingJobs();
 });
+async function resumePendingJobs() {
+  const pendingJobs = JSON.parse(localStorage.getItem("pendingJobs") || "[]");
+
+  for (const job of pendingJobs) {
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/job/${job.jobId}`);
+      const data = await res.json();
+      const jobData = data.job;
+
+      if (jobData?.status === "QUEUED" || jobData?.status === "RUNNING") {
+        const placeholder = document.createElement("div");
+        placeholder.classList.add("prompt-card");
+        placeholder.innerHTML = `<div class="status-line">⏳ Resuming job...</div>`;
+        imageFeed.prepend(placeholder);
+
+        const completed = { count: 0 };
+        const statusTracker = { highestPriority: 0 };
+
+        pollJobStatus(
+          job.jobId,
+          0,
+          job.prompt,
+          (url) => {
+            placeholder.innerHTML = `
+              <img src="${url}" />
+              <div>
+                <small><b>Prompt:</b> ${escapeHtml(job.prompt)}</small><br>
+                <small>Generated just now</small>
+                <div class="card-buttons">
+                  <button class="action-btn download-btn" data-url="${url}">Download</button>
+                </div>
+              </div>
+            `;
+          },
+          statusTracker,
+          placeholder
+        );
+      } else {
+        removeJob(job.jobId);
+      }
+    } catch (err) {
+      console.error("❌ Error resuming job:", err);
+    }
+  }
+}
+
 function renderExampleCards() {
 const container = document.getElementById("example-cards");
 examplePrompts.forEach(({ prompt, img }) => {
