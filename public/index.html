@@ -1386,8 +1386,32 @@ emailInput.value = "";
 passwordInput.value = "";
 modalStatus.textContent = "";
 } catch (e) {
-modalStatus.textContent = e.message;
+  console.error("Auth error:", e.message);
+
+  let message = "❌ Login failed.";
+
+  switch (e.code) {
+    case "auth/invalid-login-credentials":
+    case "auth/wrong-password":
+    case "auth/user-not-found":
+      message = "❌ Incorrect email or password.";
+      break;
+    case "auth/email-already-in-use":
+      message = "❌ This email is already in use.";
+      break;
+    case "auth/too-many-requests":
+      message = "❌ Too many attempts. Please try again later.";
+      break;
+    case "auth/network-request-failed":
+      message = "❌ Network error. Please check your connection.";
+      break;
+    default:
+      message = "❌ " + e.message.replace("Firebase: ", "").replace(/\(.*\)\./, "").trim();
+  }
+
+  modalStatus.textContent = message;
 }
+
 };
 logoutBtn.onclick = async () => {
 await signOut(auth);
