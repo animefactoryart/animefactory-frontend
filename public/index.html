@@ -1391,7 +1391,7 @@ console.error("Failed to set persistence:", err);
 });
 
 const firestore = getFirestore(app);
-const storage = getStorage(app, "gs://ai-image-gen-157dc.firebasestorage.app");
+const storage = getStorage(app); // auto-uses the correct bucket from `firebaseConfig`
 
 const authButtons = document.getElementById("auth-buttons");
 const userMenu = document.getElementById("user-menu");
