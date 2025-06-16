@@ -1795,7 +1795,8 @@ async function reencodeImageToBlob(imageUrl) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = "anonymous";
-    img.src = `https://cors-proxy.animefactory-proxy.workers.dev/?url=${encodeURIComponent(imageUrl)}`;
+    img.src = `https://getani.kappalol321.workers.dev/?url=${encodeURIComponent(imageUrl)}`;
+
 
     img.onload = () => {
       const canvas = document.createElement("canvas");
@@ -1818,7 +1819,7 @@ async function addWatermark(imageUrl) {
 return new Promise((resolve, reject) => {
 const img = new Image();
 img.crossOrigin = "anonymous";
-img.src = `https://cors-proxy.animefactory-proxy.workers.dev/?url=${encodeURIComponent(imageUrl)}`;
+img.src = `https://getani.kappalol321.workers.dev/?url=${encodeURIComponent(imageUrl)}`;
 
 img.onload = () => {
 const canvas = document.createElement("canvas");
