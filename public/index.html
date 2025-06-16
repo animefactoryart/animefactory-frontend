@@ -1071,33 +1071,20 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 @media (max-width: 768px) {
   #generate-form {
     display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     gap: 0.5rem;
     padding: 0 1rem;
-    margin-top: 1rem;
     width: 100%;
+    max-width: 600px;
+    margin-top: 1rem;
   }
 
-  #prompt-input {
-    flex: 1;
-    padding: 1rem;
-    border-radius: 12px;
-    font-size: 1rem;
-    resize: none;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
-  }
-
+  #prompt-input,
   #generate-form button[type="submit"] {
-    flex: 1;
-    padding: 1rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 12px;
-    white-space: nowrap;
+    width: 100%; /* 👈 force both to match width */
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 
