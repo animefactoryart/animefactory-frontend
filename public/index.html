@@ -2040,13 +2040,7 @@ const modal = document.getElementById("modal");
     modal.addEventListener("click", () => {
       modal.classList.add("hidden");
     });
-// Open the modal with the clicked image
-imageFeed.addEventListener("click", (e) => {
-if (e.target.tagName === "IMG") {
-modalImg.src = e.target.src;
-modal.classList.remove("hidden");
-}
-});
+
 // Close the modal when clicked
 modal.onclick = () => modal.classList.add("hidden");
 
