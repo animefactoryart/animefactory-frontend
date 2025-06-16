@@ -1544,19 +1544,7 @@ onAuthStateChanged(auth, async (user) => {
     await loadUserImages(user.uid);
 
     // ✅ 3. Set up modal image viewing
-    const modal = document.getElementById("modal");
-    const modalImg = document.getElementById("modal-img");
-
-    imageFeed.addEventListener("click", (e) => {
-      if (e.target.tagName === "IMG") {
-        modalImg.src = e.target.src;
-        modal.classList.remove("hidden");
-      }
-    });
-
-    modal.addEventListener("click", () => {
-      modal.classList.add("hidden");
-    });
+    
 
   } else {
     authButtons.classList.remove("hidden");
@@ -2039,7 +2027,19 @@ alert("❌ Could not download image.");
 }
 });
 
+const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modal-img");
 
+    imageFeed.addEventListener("click", (e) => {
+      if (e.target.tagName === "IMG") {
+        modalImg.src = e.target.src;
+        modal.classList.remove("hidden");
+      }
+    });
+
+    modal.addEventListener("click", () => {
+      modal.classList.add("hidden");
+    });
 // Open the modal with the clicked image
 imageFeed.addEventListener("click", (e) => {
 if (e.target.tagName === "IMG") {
