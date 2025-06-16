@@ -45,6 +45,31 @@ align-items: center;
 z-index: 1;
 }
 
+.site-name-glass-orange {
+  display: flex;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(135deg, rgba(255, 165, 0, 0.1), rgba(255, 100, 0, 0.2));
+  padding: 0.4rem 1rem;
+  border-radius: 12px;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  box-shadow: 0 4px 16px rgba(255, 140, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.site-name-glass-orange:hover {
+  box-shadow: 0 6px 24px rgba(255, 140, 0, 0.4);
+}
+
+.glow-orange {
+  color: #ffa500;
+  text-shadow: 0 0 6px rgba(255, 165, 0, 0.5);
+}
 
 
 
@@ -1046,7 +1071,10 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 <body>
 <header class="site-header">
   <div class="header-left">
-    <a href="/" class="site-name-glass">Anime<span class="glow">Factory</span></a>
+    <a href="/" class="site-name-glass-orange">
+      <img src="/favicon.png" alt="GetAni Logo" style="height: 28px; margin-right: 8px;" />
+      <span class="brand-text">Get<span class="glow-orange">Ani</span></span>
+    </a>
   </div>
 
   <nav class="header-nav">
