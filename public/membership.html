@@ -263,8 +263,14 @@ console.log("📦 Stripe session response:", data);
       
 
         if (data?.url) {
-          window.location.href = data.url;
-        } else {
+  const loadingMsg = document.createElement("div");
+  loadingMsg.textContent = "Opening payment page... please wait";
+  loadingMsg.style.color = "#ccc";
+  loadingMsg.style.fontSize = "1.1rem";
+  loadingMsg.style.marginTop = "1rem";
+  document.body.appendChild(loadingMsg);
+}
+ else {
           alert("❌ Failed to start checkout session.");
           console.error("⚠️ Missing checkout URL in response");
         }
