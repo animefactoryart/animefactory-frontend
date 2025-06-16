@@ -864,7 +864,7 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 }
 
 @media (max-width: 768px) {
-  /* 🔹 Header: Hide logo, keep nav + login in one row */
+  /* === Header Fix === */
   .site-header {
     flex-direction: row;
     flex-wrap: nowrap;
@@ -876,7 +876,7 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
   }
 
   .header-left {
-    display: none !important;
+    display: none !important; /* 🔥 Hide logo */
   }
 
   .header-nav {
@@ -891,32 +891,32 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
     justify-content: flex-end;
   }
 
-  /* 🔹 Prompt + Generate button in one row */
+  /* === Prompt Box + Button (2 rows, same width) === */
   #generate-form {
     display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
+    flex-direction: column;
     align-items: stretch;
     width: 100%;
-    padding: 0 1rem;
+    max-width: 600px;
     margin-top: 1rem;
+    padding: 0 1rem;
   }
 
   #prompt-input {
-    flex: 1;
-    width: auto;
-    border-radius: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 12px 12px 0 0;
     font-size: 1rem;
   }
 
   #generate-form button[type="submit"] {
-    white-space: nowrap;
-    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0 0 12px 12px;
     font-size: 1rem;
-    border-radius: 12px;
   }
 
-  /* 🔹 Remove unused mobile elements */
+  /* === Hide unused mobile UI === */
   #auth-buttons button,
   #auth-buttons .login-btn,
   #auth-buttons .signup-btn,
@@ -928,7 +928,7 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
   }
 
   body {
-    padding-top: 96px; /* header spacing */
+    padding-top: 96px; /* leave space for header */
   }
 }
 
