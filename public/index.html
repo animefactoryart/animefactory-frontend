@@ -1124,6 +1124,10 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 
   <!-- Mobile-only second row -->
   <div class="mobile-header-row">
+    <div id="mobile-user-info" style="display: none; margin-top: 0.5rem; font-size: 0.95rem; color: white; font-weight: 500;">
+  <span id="mobile-user-email"></span> · <span id="mobile-user-credits"></span> credits
+</div>
+
     <a href="/membership" class="mobile-membership-link">Membership</a>
     <button id="mobile-login-button" class="signup-btn">Log In</button>
   </div>
@@ -1488,6 +1492,7 @@ await signOut(auth);
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
+    
     const mobileLoginBtn = document.getElementById("mobile-login-button");
 if (mobileLoginBtn) {
   mobileLoginBtn.style.display = user ? "none" : "block";
@@ -1541,6 +1546,18 @@ if (mobileLoginBtn) {
       <i class="fas fa-gem" style="color:#3b82f6; margin-left: 8px;"></i> ${currentCredits} credits
     `;
 
+const mobileUserInfo = document.getElementById("mobile-user-info");
+const mobileEmail = document.getElementById("mobile-user-email");
+const mobileCredits = document.getElementById("mobile-user-credits");
+
+if (mobileLoginBtn) mobileLoginBtn.style.display = "none";
+
+if (mobileUserInfo && mobileEmail && mobileCredits) {
+  mobileUserInfo.style.display = "block";
+  mobileEmail.textContent = user.email;
+  mobileCredits.textContent = currentCredits;
+}
+
     // ✅ 1. Show loading cards for any pending jobs first
     await resumePendingJobs();
 
@@ -1550,7 +1567,15 @@ if (mobileLoginBtn) {
     // ✅ 3. Set up modal image viewing
     
 
-  } else {
+  }
+  
+  else {
+    
+const mobileUserInfo = document.getElementById("mobile-user-info");
+
+if (mobileLoginBtn) mobileLoginBtn.style.display = "block";
+if (mobileUserInfo) mobileUserInfo.style.display = "none";
+
     const mobileLoginBtn = document.getElementById("mobile-login-button");
 if (mobileLoginBtn) {
   mobileLoginBtn.style.display = user ? "none" : "block";
