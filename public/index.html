@@ -1087,6 +1087,25 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
     box-sizing: border-box;
   }
 }
+@media (max-width: 768px) {
+  .header-left {
+    display: none !important; /* 🚫 Hide logo area */
+  }
+
+  .site-header {
+    height: 56px; /* 🔽 Reduce header height */
+    padding: 0.25rem 1rem; /* tighter spacing */
+  }
+
+  .header-right {
+    margin-top: 0; /* remove unnecessary spacing */
+    justify-content: flex-end;
+  }
+
+  .header-nav {
+    justify-content: flex-start;
+  }
+}
 
 </style>
 </head>
