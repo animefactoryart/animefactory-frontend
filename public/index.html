@@ -864,74 +864,210 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 }
 
 @media (max-width: 768px) {
-  /* === Header Fix === */
-  .site-header {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-    height: 64px;
-    padding: 0.5rem 1rem;
-    overflow: hidden;
-  }
-
-  .header-left {
-    display: none !important; /* 🔥 Hide logo */
-  }
-
   .header-nav {
-    display: flex !important;
-    flex: 1;
-    justify-content: flex-start;
+    display: none;
   }
-
-  .header-right {
-    display: flex !important;
-    flex: 1;
-    justify-content: flex-end;
-  }
-
-  /* === Prompt Box + Button (2 rows, same width) === */
-  #generate-form {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-    max-width: 600px;
-    margin-top: 1rem;
-    padding: 0 1rem;
-  }
-
-  #prompt-input {
-    width: 100%;
-    box-sizing: border-box;
-    border-radius: 12px 12px 0 0;
-    font-size: 1rem;
-  }
-
-  #generate-form button[type="submit"] {
-    width: 100%;
-    box-sizing: border-box;
-    border-radius: 0 0 12px 12px;
-    font-size: 1rem;
-  }
-
-  /* === Hide unused mobile UI === */
-  #auth-buttons button,
-  #auth-buttons .login-btn,
-  #auth-buttons .signup-btn,
-  .mobile-header-row,
-  .hamburger,
-  .mobile-menu,
-  #mobile-login-button {
-    display: none !important;
-  }
-
-  body {
-    padding-top: 96px; /* leave space for header */
+  .hamburger {
+    display: block;
   }
 }
 
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  background-color: #111827;
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  z-index: 999;
+}
+
+.mobile-menu.show {
+  display: flex;
+}
+@media (max-width: 768px) {
+  #auth-buttons button {
+    display: none;
+  }
+
+  
+}
+
+@media (max-width: 768px) {
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    height: auto;
+    padding: 0.5rem 1rem;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+  }
+
+  .header-right {
+    margin-top: 0.5rem;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  #auth-buttons .login-btn,
+  #auth-buttons .signup-btn {
+    display: none;
+  }
+
+  #mobile-login-button {
+    display: block;
+    background-color: #3b82f6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    border: none;
+    font-size: 0.95rem;
+  }
+}
+.mobile-header-row {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .header-nav,
+  #auth-buttons,
+  .hamburger,
+  .mobile-menu {
+    display: none !important;
+  }
+
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.75rem 1rem;
+  }
+
+  .mobile-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .mobile-membership-link {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+    background: none;
+    border: none;
+  }
+
+  #mobile-login-button {
+    background: #3b82f6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-nav {
+    display: none;
+  }
+
+  #auth-buttons .signup-btn {
+    display: none;
+  }
+
+  #auth-buttons .login-btn {
+    display: none;
+  }
+
+  #mobile-login-button {
+    display: block;
+    background: #3b82f6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+  }
+
+  .mobile-menu a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .mobile-menu a:not(:last-child) {
+    border-bottom: 1px solid #2d3748;
+  }
+}
+
+
+@media (min-width: 769px) {
+  #mobile-login-button {
+    display: none;
+  }
+}
+.mobile-header-row {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .mobile-membership-link {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  #mobile-login-button {
+    background: #3b82f6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+  }
+
+  .header-nav,
+  #auth-buttons {
+    display: none !important;
+  }
+}
+@media (max-width: 768px) {
+  body {
+    padding-top: 96px; /* header (64px) + row below (approx 32px) */
+  }
+}
 
 </style>
 </head>
