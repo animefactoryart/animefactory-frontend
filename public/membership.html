@@ -199,16 +199,72 @@
 </footer>
 
 <script type="module">
-  document.addEventListener("DOMContentLoaded", () => {
-    console.log("✅ DOM loaded");
+import { auth } from "/static/firebase-init.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-    document.querySelectorAll(".subscribe-btn").forEach(button => {
-      console.log("🔍 Found button:", button);
-      button.addEventListener("click", () => {
-        alert("Button was clicked!");
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  console.log("✅ Auth state changed:", user);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("billing-toggle");
+
+  if (toggle) {
+    toggle.addEventListener("change", () => {
+      const yearly = toggle.checked;
+      document.querySelectorAll(".price").forEach(p => {
+        p.textContent = yearly ? p.dataset.year : p.dataset.month;
       });
     });
+  }
+
+  document.querySelectorAll(".subscribe-btn").forEach(button => {
+    console.log("🔍 Attaching click listener to:", button);
+
+    button.addEventListener("click", async () => {
+      console.log("🧪 Subscribe button clicked");
+
+      if (!currentUser) {
+        alert("Please log in to subscribe.");
+        console.warn("❌ No currentUser");
+        return;
+      }
+
+      const yearly = toggle?.checked ?? false;
+      const priceId = yearly ? button.dataset.year : button.dataset.month;
+
+      try {
+        const idToken = await currentUser.getIdToken();
+        console.log("🔐 Got ID token:", idToken.substring(0, 20) + "...");
+
+        const res = await fetch("https://api.getani.net/api/create-checkout-session", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${idToken}`
+          },
+          body: JSON.stringify({ priceId })
+        });
+
+        const data = await res.json();
+        console.log("📦 Stripe session response:", data);
+
+        if (data?.url) {
+          window.location.href = data.url;
+        } else {
+          alert("❌ Failed to start checkout session.");
+          console.error("⚠️ Missing checkout URL in response");
+        }
+      } catch (err) {
+        console.error("❌ Error during subscription flow:", err);
+        alert("Something went wrong. Check the console for details.");
+      }
+    });
   });
+});
 </script>
 
 </body>
