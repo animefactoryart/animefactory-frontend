@@ -1993,39 +1993,35 @@ if (msg) msg.remove();
 
 
 imageFeed.addEventListener("click", async (e) => {
-if (e.target.classList.contains("download-btn")) {
-const url = e.target.getAttribute("data-url");
+  if (e.target.classList.contains("download-btn")) {
+    const url = e.target.getAttribute("data-url");
 
-try {
-// If it's already a data URL (from canvas watermark), download directly
-if (url.startsWith("data:image")) {
-const a = document.createElement("a");
-a.href = url;
-a.download = "image.png";
-document.body.appendChild(a);
-a.click();
-document.body.removeChild(a);
-return;
-}
+    try {
+      // If it's a canvas-based data URL, use download via blob
+      if (url.startsWith("data:image")) {
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "image.png";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        return;
+      }
 
-// Otherwise, fetch as blob (for normal external URLs)
-const response = await fetch(url, { mode: "cors" });
-const blob = await response.blob();
-
-const blobUrl = URL.createObjectURL(blob);
-const a = document.createElement("a");
-a.href = blobUrl;
-a.download = "image.png";
-document.body.appendChild(a);
-a.click();
-document.body.removeChild(a);
-URL.revokeObjectURL(blobUrl);
-} catch (err) {
-console.error("Download failed:", err);
-alert("❌ Could not download image.");
-}
-}
+      // ✅ Firebase-hosted URL — skip fetch, just force browser to download
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "image.png"; // or extract filename from url if needed
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error("Download failed:", err);
+      alert("❌ Could not download image.");
+    }
+  }
 });
+
 
 const modal = document.getElementById("modal");
     const modalImg = document.getElementById("modal-img");
