@@ -199,67 +199,66 @@
 </footer>
 
 
- <script type="module">
-  import { auth } from "/static/firebase-init.js";
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+<script type="module">
+import { auth } from "/static/firebase-init.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const toggle = document.getElementById("billing-toggle");
+let currentUser = null;
 
-    if (toggle) {
-      toggle.addEventListener("change", () => {
-        const yearly = toggle.checked;
-        document.querySelectorAll(".price").forEach(p => {
-          p.textContent = yearly ? p.dataset.year : p.dataset.month;
-        });
-      });
-    }
+onAuthStateChanged(auth, (user) => {
+  console.log("✅ Auth state changed:", user);
+  currentUser = user;
+});
 
-    onAuthStateChanged(auth, (user) => {
-      console.log("✅ Auth state changed:", user);
-      const buttons = document.querySelectorAll(".subscribe-btn");
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("billing-toggle");
 
-      if (!buttons.length) {
-        console.warn("⚠️ No subscribe buttons found");
-        return;
-      }
-
-      buttons.forEach(button => {
-        button.addEventListener("click", async () => {
-          if (!user) {
-            alert("Please log in to subscribe.");
-            return;
-          }
-
-          const yearly = toggle?.checked ?? false;
-          const priceId = yearly ? button.dataset.year : button.dataset.month;
-          const idToken = await user.getIdToken();
-
-          try {
-            const res = await fetch("https://api.getani.net/api/create-checkout-session", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${idToken}`
-              },
-              body: JSON.stringify({ priceId })
-            });
-
-            const data = await res.json();
-            if (data?.url) {
-              window.location.href = data.url;
-            } else {
-              alert("❌ Failed to start checkout session.");
-              console.error("❌ No URL returned:", data);
-            }
-          } catch (err) {
-            console.error("❌ Subscription error:", err);
-            alert("Something went wrong. Check the console.");
-          }
-        });
+  if (toggle) {
+    toggle.addEventListener("change", () => {
+      const yearly = toggle.checked;
+      document.querySelectorAll(".price").forEach(p => {
+        p.textContent = yearly ? p.dataset.year : p.dataset.month;
       });
     });
+  }
+
+  // ✅ Event delegation for buttons
+  document.body.addEventListener("click", async (e) => {
+    const button = e.target.closest(".subscribe-btn");
+    if (!button) return;
+
+    if (!currentUser) {
+      alert("Please log in to subscribe.");
+      return;
+    }
+
+    const yearly = toggle?.checked ?? false;
+    const priceId = yearly ? button.dataset.year : button.dataset.month;
+    const idToken = await currentUser.getIdToken();
+
+    try {
+      const res = await fetch("https://api.getani.net/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`
+        },
+        body: JSON.stringify({ priceId })
+      });
+
+      const data = await res.json();
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        alert("❌ Failed to start checkout session.");
+        console.error("❌ No URL returned:", data);
+      }
+    } catch (err) {
+      console.error("❌ Subscription error:", err);
+      alert("Something went wrong. Check the console.");
+    }
   });
+});
 </script>
 
 </body>
