@@ -1872,45 +1872,45 @@ async function reencodeImageToBlob(imageUrl) {
 
 
 async function addWatermark(imageUrl) {
-return new Promise((resolve, reject) => {
-const img = new Image();
-img.crossOrigin = "anonymous";
-img.src = `https://getani.kappalol321.workers.dev/?url=${encodeURIComponent(imageUrl)}`;
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = `https://getani.kappalol321.workers.dev/?url=${encodeURIComponent(imageUrl)}`;
 
-img.onload = () => {
-const canvas = document.createElement("canvas");
-canvas.width = img.width;
-canvas.height = img.height;
-const ctx = canvas.getContext("2d");
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
 
-// Draw the image
-ctx.drawImage(img, 0, 0);
+      // Draw the base image
+      ctx.drawImage(img, 0, 0);
 
-// Watermark settings
-const fontSize = Math.floor(canvas.width * 0.035);
-ctx.font = `bold ${fontSize}px Poppins`;
-ctx.textAlign = "right";
-ctx.textBaseline = "bottom";
+      // Watermark settings (match server-side logic)
+      const fontSize = Math.floor(canvas.width * 0.035);
+      ctx.font = `bold ${fontSize}px Poppins, sans-serif`;  // include fallback
+      ctx.textAlign = "right";
+      ctx.textBaseline = "bottom";
 
-const padding = canvas.width * 0.02;
-const text = "Getani.net";
+      const padding = canvas.width * 0.02;
+      const text = "getani.net"; // lowercase to match script
 
-// Stroke (black outline)
-ctx.lineWidth = 4;
-ctx.strokeStyle = "rgba(0, 0, 0, 0.8)";
-ctx.strokeText(text, canvas.width - padding, canvas.height - padding);
+      // Stroke (black outline)
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.8)";
+      ctx.strokeText(text, canvas.width - padding, canvas.height - padding);
 
-// Fill (white text)
-ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
-ctx.fillText(text, canvas.width - padding, canvas.height - padding);
+      // Fill (white text)
+      ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
+      ctx.fillText(text, canvas.width - padding, canvas.height - padding);
 
-resolve(canvas.toDataURL("image/png"));
-};
+      resolve(canvas.toDataURL("image/png"));
+    };
 
-img.onerror = () => {
-reject(new Error("Image failed to load (likely expired or CORS-restricted)"));
-};
-});
+    img.onerror = () => {
+      reject(new Error("Image failed to load (likely expired or CORS-restricted)"));
+    };
+  });
 }
 
 
