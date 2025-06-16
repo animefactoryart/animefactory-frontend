@@ -51,15 +51,15 @@ z-index: 1;
   font-family: 'Poppins', sans-serif;
   font-size: 1.6rem;
   font-weight: 700;
-  text-decoration: none;
   color: #fff;
-  background: linear-gradient(135deg, rgba(255, 165, 0, 0.1), rgba(255, 100, 0, 0.2));
+  text-decoration: none;
   padding: 0.4rem 1rem;
   border-radius: 12px;
-  backdrop-filter: blur(12px) saturate(150%);
-  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  background: linear-gradient(135deg, rgba(255, 165, 0, 0.08), rgba(255, 100, 0, 0.12));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 4px 16px rgba(255, 140, 0, 0.25);
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease;
 }
 
 .site-name-glass-orange:hover {
@@ -70,6 +70,8 @@ z-index: 1;
   color: #ffa500;
   text-shadow: 0 0 6px rgba(255, 165, 0, 0.5);
 }
+
+
 
 
 
@@ -1071,8 +1073,7 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 <body>
 <header class="site-header">
   <div class="header-left">
-    <a href="/" class="site-name-glass-orange">
-      <img src="/favicon.png" alt="GetAni Logo" style="height: 28px; margin-right: 8px;" />
+   <a href="/" class="site-name-glass-orange">
       <span class="brand-text">Get<span class="glow-orange">Ani</span></span>
     </a>
   </div>
