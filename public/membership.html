@@ -198,67 +198,17 @@
     <a href="mailto:kappalol321@gmail.com">kappalol321@gmail.com</a>
 </footer>
 
-
 <script type="module">
-import { auth } from "/static/firebase-init.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+  document.addEventListener("DOMContentLoaded", () => {
+    console.log("✅ DOM loaded");
 
-let currentUser = null;
-
-onAuthStateChanged(auth, (user) => {
-  console.log("✅ Auth state changed:", user);
-  currentUser = user;
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const toggle = document.getElementById("billing-toggle");
-
-  if (toggle) {
-    toggle.addEventListener("change", () => {
-      const yearly = toggle.checked;
-      document.querySelectorAll(".price").forEach(p => {
-        p.textContent = yearly ? p.dataset.year : p.dataset.month;
+    document.querySelectorAll(".subscribe-btn").forEach(button => {
+      console.log("🔍 Found button:", button);
+      button.addEventListener("click", () => {
+        alert("Button was clicked!");
       });
     });
-  }
-
-  // ✅ Event delegation for buttons
-  document.body.addEventListener("click", async (e) => {
-    const button = e.target.closest(".subscribe-btn");
-    if (!button) return;
-
-    if (!currentUser) {
-      alert("Please log in to subscribe.");
-      return;
-    }
-
-    const yearly = toggle?.checked ?? false;
-    const priceId = yearly ? button.dataset.year : button.dataset.month;
-    const idToken = await currentUser.getIdToken();
-
-    try {
-      const res = await fetch("https://api.getani.net/api/create-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`
-        },
-        body: JSON.stringify({ priceId })
-      });
-
-      const data = await res.json();
-      if (data?.url) {
-        window.location.href = data.url;
-      } else {
-        alert("❌ Failed to start checkout session.");
-        console.error("❌ No URL returned:", data);
-      }
-    } catch (err) {
-      console.error("❌ Subscription error:", err);
-      alert("Something went wrong. Check the console.");
-    }
   });
-});
 </script>
 
 </body>
