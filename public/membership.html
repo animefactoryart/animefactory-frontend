@@ -203,13 +203,8 @@
 <script type="module">
 import { auth } from "/static/firebase-init.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
 const toggle = document.getElementById("billing-toggle");
-let currentUser = null;
-
-onAuthStateChanged(auth, (user) => {
-  currentUser = user;
-});
-
 
 if (toggle) {
   toggle.addEventListener("change", () => {
@@ -220,37 +215,40 @@ if (toggle) {
   });
 }
 
-document.querySelectorAll(".subscribe-btn").forEach(button => {
-  button.addEventListener("click", async () => {
-    const yearly = toggle?.checked ?? false;
-    const priceId = yearly ? button.dataset.year : button.dataset.month;
+// ✅ Wait for Firebase to determine auth state
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    alert("Please log in to subscribe.");
+    window.location.href = "/";
+    return;
+  }
 
-    if (!currentUser) {
-      alert("Please log in to subscribe.");
-      return;
-    }
+  // ✅ Only add event listeners once we know the user is authenticated
+  document.querySelectorAll(".subscribe-btn").forEach(button => {
+    button.addEventListener("click", async () => {
+      const yearly = toggle?.checked ?? false;
+      const priceId = yearly ? button.dataset.year : button.dataset.month;
+      const idToken = await user.getIdToken();
 
-    const idToken = await currentUser.getIdToken();
+      const res = await fetch("https://api.getani.net/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`
+        },
+        body: JSON.stringify({ priceId })
+      });
 
-    const res = await fetch("https://api.getani.net/api/create-checkout-session", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${idToken}`
-  },
-  body: JSON.stringify({ priceId })
-});
-
-
-const data = await res.json();
-
-    if (data?.url) {
-      window.location.href = data.url;
-    } else {
-      alert("❌ Failed to start checkout session.");
-    }
+      const data = await res.json();
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        alert("❌ Failed to start checkout session.");
+      }
+    });
   });
 });
+
 </script>
 
 
