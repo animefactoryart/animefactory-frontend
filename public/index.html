@@ -1124,9 +1124,15 @@ text-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
 
   <!-- Mobile-only second row -->
   <div class="mobile-header-row">
-    <div id="mobile-user-info" style="display: none; margin-top: 0.5rem; font-size: 0.95rem; color: white; font-weight: 500;">
-  <span id="mobile-user-email"></span> · <span id="mobile-user-credits"></span> credits
+    <div id="mobile-user-info" style="display: none; display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; color: white; font-size: 0.9rem;">
+  <a href="/membership" style="color: #3b82f6; text-decoration: none; font-weight: 500;">Membership</a>
+  <div>
+    <span id="mobile-user-email"></span>
+    <i class="fas fa-gem" style="color:#3b82f6; margin-left: 6px; margin-right: 4px;"></i>
+    <span id="mobile-user-credits"></span>
+  </div>
 </div>
+
 
     <a href="/membership" class="mobile-membership-link">Membership</a>
     <button id="mobile-login-button" class="signup-btn">Log In</button>
