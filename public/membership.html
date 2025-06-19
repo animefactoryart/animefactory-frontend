@@ -235,7 +235,9 @@ document.addEventListener("DOMContentLoaded", () => {
       console.warn("❌ No currentUser");
       return;
     }
-
+   const originalText = button.textContent;
+  button.textContent = "Opening payment page...";
+  button.disabled = true;
     const yearly = toggle?.checked ?? false;
     const priceId = yearly ? button.dataset.year : button.dataset.month;
 
